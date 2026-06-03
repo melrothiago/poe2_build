@@ -5,20 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PoE2 Builds</title>
 <style>
-:root {
-  --bg: #0a0a12; --card: #14141f; --card2: #1c1c2e; --border: #2a2a3e;
-  --text: #dedee6; --text2: #8a8a9a; --accent: #c44b2b; --gold: #c7a040;
-  --green: #3da85c; --blue: #4a8fbf; --purple: #8b5cf6; --radius: 12px;
-}
+:root{--bg:#0a0a12;--card:#14141f;--card2:#1c1c2e;--border:#2a2a3e;--text:#dedee6;--text2:#8a8a9a;--accent:#c44b2b;--gold:#c7a040;--green:#3da85c;--blue:#4a8fbf;--purple:#8b5cf6;--radius:12px}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
-
-/* Header */
 .hdr{text-align:center;padding:2rem 1rem 0.5rem}
 .hdr h1{font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hdr p{color:var(--text2);font-size:0.85rem;margin-top:0.2rem}
-
-/* Class Grid */
+.hdr .sub-info{color:var(--text2);font-size:0.7rem;margin-top:0.3rem}
 .grid{max-width:820px;margin:1rem auto;padding:0 1rem;display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem}
 .card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:0.8rem 0.4rem;cursor:pointer;text-align:center;transition:all 0.2s}
 .card:hover{border-color:var(--accent);transform:translateY(-2px)}
@@ -28,30 +21,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .card .sub{color:var(--text2);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px}
 .card.locked{opacity:0.35;cursor:not-allowed;filter:grayscale(0.7)}
 .card.locked:hover{border-color:var(--border);transform:none}
-
-/* Search button */
-.btn-wrap{text-align:center;margin:0.8rem 0;padding:0 1rem}
+.btn-wrap{text-align:center;margin:0.8rem 0;padding:0 1rem;display:flex;flex-direction:column;align-items:center;gap:0.4rem}
 .btn{background:var(--accent);color:#fff;border:none;padding:0.8rem 2.5rem;font-size:1.05rem;font-weight:700;border-radius:10px;cursor:pointer;transition:all 0.2s;width:100%;max-width:300px}
 .btn:hover{background:#d85a38;transform:scale(1.02)}
 .btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-
-/* Loading */
-.loading{max-width:600px;margin:0 auto 1.5rem;padding:0 1rem;display:none}
-.loading.v{display:block}
-.barra{height:5px;background:var(--card2);border-radius:3px;overflow:hidden;margin-bottom:0.5rem}
-.fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:3px;transition:width 0.4s ease}
-.load-txt{text-align:center;color:var(--text2);font-size:0.85rem}
-.load-src{display:flex;flex-wrap:wrap;gap:0.3rem;justify-content:center;margin-top:0.4rem}
-.ls{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:0.1rem 0.5rem;font-size:0.7rem;color:var(--text2)}
-.ls.ok{color:var(--green);border-color:var(--green)}
-.ls.fail{color:var(--accent);border-color:var(--accent);text-decoration:line-through}
-
-/* Results */
+.btn-sm{background:transparent;color:var(--text2);border:1px solid var(--border);padding:0.4rem 1rem;font-size:0.75rem;border-radius:8px;cursor:pointer;transition:all 0.2s}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold)}
 .results{max-width:820px;margin:0 auto 2rem;padding:0 1rem;display:none}
 .results.v{display:block}
 .result-count{text-align:center;color:var(--text2);margin-bottom:1rem;font-size:0.9rem}
-
-/* Build Card */
 .build-card{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:0.8rem;position:relative;overflow:hidden}
 .build-card.best{border-color:var(--gold);box-shadow:0 0 20px rgba(199,160,64,0.15)}
 .build-card.best::before{content:'★ MELHOR BUILD';position:absolute;top:10px;right:10px;background:var(--gold);color:var(--bg);font-size:0.6rem;font-weight:800;padding:0.2rem 0.5rem;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px}
@@ -60,41 +38,51 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .build-class .em{font-size:1.5rem;margin-right:0.3rem}
 .tag{display:inline-block;padding:0.15rem 0.5rem;border-radius:20px;font-size:0.65rem;font-weight:600;text-transform:uppercase}
 .tag-source{background:rgba(74,143,191,0.15);color:var(--blue);border:1px solid rgba(74,143,191,0.25)}
-.tag-archetype{background:rgba(61,168,92,0.15);color:var(--green);border:1px solid rgba(61,168,92,0.25)}
-.build-info{display:flex;flex-wrap:wrap;gap:1rem;margin:0.5rem 0}
-.build-info-item{font-size:0.8rem;color:var(--text2)}
-.build-info-item strong{color:var(--text)}
 .build-link{display:inline-block;margin-top:0.5rem;color:var(--gold);text-decoration:none;font-weight:600;font-size:0.85rem}
 .build-link:hover{text-decoration:underline}
-
-/* Empty state */
 .empty{text-align:center;padding:3rem 1rem;color:var(--text2)}
 .empty .em{font-size:3rem;display:block;margin-bottom:1rem}
 </style>
 </head>
 <body>
-
 <div class="hdr">
   <h1>PoE2 Builds</h1>
-  <p>Selecione uma classe e clique em Pesquisar — encontraremos as melhores builds nas principais fontes</p>
+  <p>Selecione uma classe para ver as melhores builds</p>
+  <div class="sub-info" id="dataInfo">📦 Dados embedados · <span id="dataDate"></span></div>
 </div>
-
 <div class="grid" id="grid"></div>
-
 <div class="btn-wrap">
-  <button class="btn" id="btn" onclick="pesquisar()">🔍 Pesquisar</button>
+  <button class="btn" id="btn" onclick="pesquisar()">🔍 Ver Builds</button>
+  <button class="btn-sm" onclick="atualizarDados()">🔄 Atualizar dados do Maxroll</button>
 </div>
-
-<div class="loading" id="loading">
-  <div class="barra"><div class="fill" id="fill"></div></div>
-  <div class="load-txt" id="loadTxt">Iniciando...</div>
-  <div class="load-src" id="loadSrc"></div>
-</div>
-
 <div class="results" id="results"></div>
 
 <script>
-// ─── Classes do PoE2 ───
+// ═══════════════════════════════════════════
+// DADOS EMBEDADOS — 20 builds do Maxroll (02/06/2026)
+// ═══════════════════════════════════════════
+const BUILDS_DATA = [
+  {n:"Minion Army Spirit Walker",c:"witch",u:"/poe2/build-guides/minion-army-spirit-walker-build-guide"},
+  {n:"Spirit Walker Twisters",c:"huntress",u:"/poe2/build-guides/spirit-walker-twisters-build-guide"},
+  {n:"Arc Stormweaver",c:"sorceress",u:"/poe2/build-guides/arc-stormweaver-build-guide"},
+  {n:"Explosive Grenade Ranger Leveling",c:"ranger",u:"/poe2/build-guides/explosive-grenade-gas-grenade-ranger-leveling-build-guide"},
+  {n:"Explosive Grenade Huntress",c:"huntress",u:"/poe2/build-guides/explosive-grenade-gas-grenade-huntress-leveling-build-guide"},
+  {n:"Explosive Grenade Mercenary",c:"mercenary",u:"/poe2/build-guides/explosive-grenade-gas-grenade-mercenary-leveling-build-guide"},
+  {n:"Lightning Arrow Deadeye",c:"ranger",u:"/poe2/build-guides/lightning-arrow-deadeye-build-guide"},
+  {n:"Essence Drain Lich",c:"witch",u:"/poe2/build-guides/essence-drain-lich-build-guide"},
+  {n:"Storm Wave Monk",c:"monk",u:"/poe2/build-guides/storm-wave-monk-build-guide"},
+  {n:"Disciple of Varashta Plant",c:"druid",u:"/poe2/build-guides/disciple-of-varashta-plant-build-guide"},
+  {n:"Whirling Assault Martial Artist",c:"monk",u:"/poe2/build-guides/whirling-assault-martial-artist-build-guide"},
+  {n:"Grenade Mercenary Guide",c:"mercenary",u:"/poe2/build-guides/grenade-mercenary-guide-witchhunter-tactician-build-guide"},
+  {n:"The Spear Huntress Guide",c:"huntress",u:"/poe2/build-guides/the-spear-huntress-guide-build-guide"},
+  {n:"Entangle Oracle",c:"druid",u:"/poe2/build-guides/entangle-oracle-build-guide"},
+  {n:"Ice Strike Invoker Monk",c:"monk",u:"/poe2/build-guides/ice-strike-invoker-monk-leveling-build-guide"},
+  {n:"Ice Nova Snap Stormweaver",c:"sorceress",u:"/poe2/build-guides/ice-nova-snap-stormweaver-build-guide"},
+  {n:"Falling Thunder Invoker",c:"monk",u:"/poe2/build-guides/falling-thunder-invoker-build-guide"},
+  {n:"The Shapeshift Druid Guide",c:"druid",u:"/poe2/build-guides/the-shapeshift-druid-guide-build-guide"},
+  {n:"Frostbolt Cast On Crit Comet Stormweaver",c:"sorceress",u:"/poe2/build-guides/frostbolt-cast-on-crit-comet-stormweaver-endgame-build-guide"}
+];
+
 const CLASSES = [
   {slug:'witch',name:'Bruxa',emoji:'💀',asc:'Infernalist, Blood Mage',locked:false},
   {slug:'sorceress',name:'Feiticeira',emoji:'🪄',asc:'Stormweaver, Chronomancer',locked:false},
@@ -111,188 +99,99 @@ const CLASSES = [
 ];
 
 let classeSelecionada = null;
-let ocupado = false;
+
+document.getElementById('dataDate').textContent = new Date().toLocaleDateString('pt-BR');
 
 function montarGrid() {
   const grid = document.getElementById('grid');
-  grid.innerHTML = CLASSES.map(c => 
-    `<div class="card${c.locked?' locked':''}${c.slug===classeSelecionada?' sel':''}" 
+  grid.innerHTML = CLASSES.map(c => {
+    const count = BUILDS_DATA.filter(b => b.c === c.slug).length;
+    return `<div class="card${c.locked?' locked':''}${c.slug===classeSelecionada?' sel':''}" 
          ${!c.locked ? `onclick="selecionar('${c.slug}')"` : ''}>
       <span class="em">${c.emoji}</span>
       <span class="nm">${c.name}</span>
       <span class="sub">${c.asc}</span>
-      ${c.locked ? '<span class="sub">Em breve</span>' : ''}
-    </div>`
-  ).join('');
+      ${c.locked ? '<span class="sub">Em breve</span>' : `<span class="sub">${count} builds</span>`}
+    </div>`;
+  }).join('');
 }
 
 function selecionar(slug) {
   classeSelecionada = slug;
   montarGrid();
+  pesquisar();
 }
 
-// ─── Proxy CORS ───
-const PROXIES = [
-  'https://api.allorigins.dev/raw?url=',
-  'https://corsproxy.io/?',
-  'https://api.allorigins.win/raw?url=',
-  'https://api.codetabs.com/v1/proxy?quest='
-];
-
-function fetchComProxy(url, timeout=8000) {
-  return new Promise((resolve) => {
-    const tentar = (i) => {
-      if (i >= PROXIES.length) { resolve({ok:false,source:url,error:'todos proxies falharam'}); return; }
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), timeout);
-      fetch(PROXIES[i] + encodeURIComponent(url), {signal:controller.signal})
-        .then(r => r.text())
-        .then(txt => { clearTimeout(timer); resolve({ok:true,source:url,text:txt}); })
-        .catch(() => { clearTimeout(timer); tentar(i+1); });
-    };
-    tentar(0);
-  });
-}
-
-// ─── Fontes ───
-const FONTES = [
-  {nome:'Maxroll',icon:'📋', url: (cls) => `https://maxroll.gg/poe2/build-guides?filter[class][filters][0][value]=${cls}`},
-  {nome:'Mobalytics',icon:'📊', url: (cls) => `https://mobalytics.gg/poe-2/builds?class=${cls}`},
-  {nome:'PoE Ninja',icon:'🥷', url: (cls) => `https://poe.ninja/poe2/builds?class=${cls}`},
-  {nome:'Reddit',icon:'💬', url: (cls) => `https://www.reddit.com/r/PathOfExile2Builds/search.json?q=${cls}&sort=relevance&restrict_sr=on&limit=5`},
-];
-
-function extrairBuildsDoMaxroll(html, cls) {
-  const builds = [];
-  const regex = /<a[^>]*href="([^"]*\/build-guides\/[^"]*)"[^>]*>\s*<h2[^>]*>([^<]+)</g;
-  let m;
-  while ((m = regex.exec(html)) !== null) {
-    const nome = m[2].trim().replace(/Build Guide$/i,'').trim();
-    if (nome.length > 3 && nome.length < 100) {
-      builds.push({nome, url: m[1].startsWith('http') ? m[1] : 'https://maxroll.gg' + m[1], fonte:'Maxroll', classe:cls});
-    }
-  }
-  return builds.slice(0, 5);
-}
-
-function extrairBuildsDoReddit(json, cls) {
-  try {
-    const data = JSON.parse(json);
-    return (data.data?.children || []).slice(0, 10).map(p => ({
-      nome: p.data.title.replace(/\[.*?\]/g,'').trim().slice(0, 80),
-      url: `https://reddit.com${p.data.permalink}`,
-      fonte: 'Reddit',
-      classe: cls,
-      score: p.data.score,
-      comments: p.data.num_comments
-    }));
-  } catch { return []; }
-}
-
-function extrairBuildsGenerico(html, cls, fonte) {
-  const builds = [];
-  // Tenta extrair links com texto significativo
-  const regex = /<a[^>]*href="([^"]*)"[^>]*>([^<]{10,100})<\/a>/gi;
-  let m;
-  const termos = ['build','guide',' level ','endgame','starter','league'];
-  while ((m = regex.exec(html)) !== null) {
-    const txt = m[2].toLowerCase();
-    if (termos.some(t => txt.includes(t)) && !txt.includes('cookie') && !txt.includes('privacy')) {
-      builds.push({nome: m[2].trim().slice(0, 80), url: m[1], fonte, classe:cls});
-    }
-  }
-  return builds.slice(0, 5);
-}
-
-// ─── Pesquisa ───
-async function pesquisar() {
-  if (!classeSelecionada || ocupado) return;
-  ocupado = true;
-  
-  const btn = document.getElementById('btn');
-  btn.disabled = true;
-  btn.textContent = '⏳ Pesquisando...';
-  
-  const load = document.getElementById('loading');
-  const fill = document.getElementById('fill');
-  const loadTxt = document.getElementById('loadTxt');
-  const loadSrc = document.getElementById('loadSrc');
-  const results = document.getElementById('results');
-  
-  load.classList.add('v');
-  results.classList.remove('v');
-  results.innerHTML = '';
-  fill.style.width = '0%';
-  loadSrc.innerHTML = FONTES.map(f => `<span class="ls">${f.icon} ${f.nome}</span>`).join('');
-  
+function pesquisar() {
+  if (!classeSelecionada) return;
   const cls = classeSelecionada;
-  const todasBuilds = [];
-  
-  for (let i = 0; i < FONTES.length; i++) {
-    const fonte = FONTES[i];
-    loadTxt.textContent = `Consultando ${fonte.nome}...`;
-    const pct = Math.round(((i+1)/FONTES.length)*100);
-    fill.style.width = pct + '%';
-    
-    const tags = loadSrc.querySelectorAll('.ls');
-    try {
-      const resp = await fetchComProxy(fonte.url(cls), 10000);
-      if (resp.ok && resp.text) {
-        let builds = [];
-        if (fonte.nome === 'Reddit') {
-          builds = extrairBuildsDoReddit(resp.text, cls);
-        } else if (fonte.nome === 'Maxroll') {
-          builds = extrairBuildsDoMaxroll(resp.text, cls);
-        } else {
-          builds = extrairBuildsGenerico(resp.text, cls, fonte.nome);
-        }
-        todasBuilds.push(...builds);
-        if (tags[i]) { tags[i].classList.add('ok'); tags[i].textContent += ` (${builds.length})`; }
-      } else {
-        if (tags[i]) { tags[i].classList.add('fail'); }
-      }
-    } catch {
-      if (tags[i]) { tags[i].classList.add('fail'); }
-    }
+  const results = document.getElementById('results');
+  const btn = document.getElementById('btn');
+  const classeInfo = CLASSES.find(c => c.slug === cls);
+
+  const builds = BUILDS_DATA.filter(b => b.c === cls);
+  const embedCount = builds.length;
+
+  if (embedCount === 0) {
+    results.innerHTML = `<div class="empty"><span class="em">🔍</span><p>Nenhuma build embedada para ${classeInfo?.name}.</p></div>`;
+    results.classList.add('v');
+    return;
   }
+
+  let html = `<div class="result-count">🔎 <strong>${embedCount} builds</strong> para ${classeInfo?.emoji} <strong>${classeInfo?.name}</strong></div>`;
   
-  // Montar resultado
-  loadTxt.textContent = `${todasBuilds.length} builds encontradas. Ordenando...`;
-  
-  if (todasBuilds.length === 0) {
-    results.innerHTML = `<div class="empty"><span class="em">🔍</span><p>Nenhuma build encontrada para ${CLASSES.find(c=>c.slug===cls)?.name || cls}.</p><p style="color:var(--text2);margin-top:0.5rem">As fontes podem estar bloqueando proxies públicos.</p><p style="color:var(--gold);margin-top:0.5rem;font-size:0.85rem">💡 Dica: rode no terminal → <code style="background:var(--card2);padding:0.1rem 0.4rem;border-radius:4px">cd ~/Documentos/poe2_builds && python3 -m http.server 8000</code><br>Depois abra <a href="http://localhost:8000" style="color:var(--gold)">http://localhost:8000</a></p></div>`;
-  } else {
-    // Ordenar: Reddit com mais upvotes primeiro, depois Maxroll
-    todasBuilds.sort((a,b) => (b.score||0) - (a.score||0));
-    
-    const classeInfo = CLASSES.find(c => c.slug === cls);
-    const totalFontes = [...new Set(todasBuilds.map(b=>b.fonte))].length;
-    
-    let html = `<div class="result-count">🔎 <strong>${todasBuilds.length} builds</strong> encontradas em <strong>${totalFontes}</strong> fontes para ${classeInfo?.emoji} <strong>${classeInfo?.name}</strong></div>`;
-    
-    todasBuilds.forEach((b, i) => {
-      const isBest = i === 0;
-      html += `
-        <div class="build-card${isBest?' best':''}">
-          <div class="build-top">
-            <span class="build-class">${classeInfo?.emoji} ${b.nome}</span>
-          </div>
-          <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin:0.5rem 0">
-            <span class="tag tag-source">📋 ${b.fonte}</span>
-            ${b.score ? `<span class="tag" style="background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.25)">⬆ ${b.score}</span>` : ''}
-            ${b.comments ? `<span class="tag" style="background:rgba(139,92,246,0.15);color:var(--purple);border:1px solid rgba(139,92,246,0.25)">💬 ${b.comments}</span>` : ''}
-          </div>
-          <a class="build-link" href="${b.url}" target="_blank" rel="noopener">🔗 Ver build completa →</a>
-        </div>`;
-    });
-    results.innerHTML = html;
-  }
-  
+  builds.forEach((b, i) => {
+    html += `
+      <div class="build-card${i===0?' best':''}">
+        <div class="build-top">
+          <span class="build-class">${classeInfo?.emoji} ${b.n}</span>
+        </div>
+        <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin:0.5rem 0">
+          <span class="tag tag-source">📋 Maxroll</span>
+        </div>
+        <a class="build-link" href="https://maxroll.gg${b.u}" target="_blank" rel="noopener">🔗 Ver build completa →</a>
+      </div>`;
+  });
+
+  results.innerHTML = html;
   results.classList.add('v');
-  load.classList.remove('v');
-  btn.disabled = false;
-  btn.textContent = '🔍 Pesquisar';
-  ocupado = false;
+}
+
+function atualizarDados() {
+  const info = document.getElementById('dataInfo');
+  info.innerHTML = '🔄 Atualizando...';
+  
+  const proxy = 'https://api.allorigins.dev/raw?url=';
+  const url = 'https://maxroll.gg/poe2/build-guides';
+  
+  fetch(proxy + encodeURIComponent(url))
+    .then(r => r.text())
+    .then(html => {
+      const regex = /<a[^>]*href="(\/poe2\/build-guides\/[^"]*)"[^>]*>.*?<img[^>]*alt="([^"]*build[^"]*guide[^"]*)"[^>]*>/gi;
+      const novas = [];
+      const slugs = new Set();
+      let m;
+      while ((m = regex.exec(html)) !== null) {
+        const slug = m[1];
+        if (slugs.has(slug)) continue;
+        slugs.add(slug);
+        const name = m[2].replace(/Build Guide/gi,'').replace(/Leveling/gi,'').trim();
+        if (name.length > 3) {
+          novas.push({n: name.slice(0,80), c: slug.split('-')[0], u: slug});
+        }
+      }
+      if (novas.length > 5) {
+        BUILDS_DATA.length = 0;
+        BUILDS_DATA.push(...novas);
+        if (classeSelecionada) pesquisar();
+        info.innerHTML = `✅ Atualizado! ${novas.length} builds do Maxroll · ${new Date().toLocaleDateString('pt-BR')}`;
+      } else {
+        info.innerHTML = '⚠️ Não foi possível atualizar. Tente mais tarde.';
+      }
+    })
+    .catch(() => {
+      info.innerHTML = '⚠️ Falha ao atualizar. Proxy indisponível.';
+    });
 }
 
 // Init
