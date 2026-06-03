@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PoE2 Builds</title>
+<meta name="description" content="Melhores builds de Path of Exile 2 com análise por IA. Selecione sua classe e descubra as melhores builds da temporada.">
+<meta property="og:title" content="PoE2 Builds">
+<meta property="og:description" content="Melhores builds de Path of Exile 2 com análise por IA">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#c44b2b">
+<title>PoE2 Builds — Path of Exile 2</title>
 <style>
 :root{--bg:#0a0a12;--card:#14141f;--card2:#1c1c2e;--border:#2a2a3e;--text:#dedee6;--text2:#8a8a9a;--accent:#c44b2b;--gold:#c7a040;--green:#3da85c;--blue:#4a8fbf;--purple:#8b5cf6;--radius:12px}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -75,7 +80,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   <button class="gear" onclick="abrirConfig()" title="Configurações">⚙</button>
   <h1>PoE2 Builds</h1>
   <p>Selecione uma classe para ver as melhores builds com análise por IA</p>
-  <div class="sub-info" id="dataInfo">📦 Dados embedados · <span id="dataDate"></span></div>
+  <div class="sub-info" id="dataInfo">📦 Dados embedados (02/06/2026 · temporada Return of the Ancients) · <span id="dataDate"></span></div>
 </div>
 
 <div class="grid" id="grid"></div>
@@ -185,28 +190,57 @@ function salvarConfig() {
 async function analisarComIA(cls, builds) {
   if (!chaveDeepSeek || builds.length === 0) return null;
   const classeInfo = CLASSES.find(c => c.slug === cls);
-  const nomesBuilds = builds.map(b => b.n).join(', ');
   
-  const prompt = `Você é um especialista em Path of Exile 2. Analise as seguintes builds para a classe **${classeInfo?.name}** (${classeInfo?.emoji}) e responda EM PORTUGUÊS:
+  const detalhesBuilds = builds.map(b =>
+    `- **${b.n}**: https://maxroll.gg${b.u}`
+  ).join('\n');
 
-Builds disponíveis: ${nomesBuilds}
+  const temLeveling = builds.some(b => b.n.toLowerCase().includes('leveling'));
+  const temEndgame = builds.some(b => b.n.toLowerCase().includes('endgame'));
+  const tipos = [];
+  if (temLeveling) tipos.push('leveling');
+  if (temEndgame) tipos.push('endgame');
+  if (!temLeveling && !temEndgame) tipos.push('endgame (presumido)');
+  
+  const prompt = `Você é um especialista em Path of Exile 2. Analise as seguintes builds da classe **${classeInfo?.name}** (${classeInfo?.emoji}) para a temporada **Return of the Ancients** e crie um GUIA COMPLETO EM PORTUGUÊS:
 
-Explique:
-1. 📊 **Visão Geral** — O meta atual para ${classeInfo?.name} na temporada Return of the Ancients
-2. 🏆 **Melhor Build** — Qual é a melhor build entre estas e por quê
-3. 🎯 **Para Iniciantes** — Qual build é mais amigável para começar a temporada
-4. ⚡ **Para Endgame** — Qual build escala melhor para conteúdo avançado
-5. 💡 **Dica Rápida** — Uma dica importante sobre a classe
+Builds disponíveis:
+${detalhesBuilds}
 
-Seja conciso (máx 250 palavras). Use emojis e formatação amigável.`;
+Ascendências da classe: ${classeInfo?.asc}
+Tipo: ${tipos.join(', ')}
+
+Escreva no seguinte formato, com seções claras:
+
+## 📊 Visão Geral do Meta
+Análise do meta atual para ${classeInfo?.name} na temporada.
+
+## 🏆 Melhor Build (detalhada)
+- **Nome da build**
+- **Ascendência recomendada**
+- **Skill principal** (qual habilidade usar)
+- **Support Gems** (gems de suporte para a skill principal)
+- **Equipamento essencial** (arma, armadura, acessórios principais)
+- **Por que esta build é a melhor** (2-3 frases)
+
+## 🎯 Build para Iniciantes
+Qual build é mais amigável e o que priorizar no early game.
+
+## ⚡ Build para Endgame
+Qual build escala melhor e dicas de transição.
+
+## 💡 Dicas Importantes
+3 dicas rápidas sobre ${classeInfo?.name}.
+
+Seja detalhado (máx 600 palavras). Use emojis e formatação amigável. Destaque skills e gems com \`aspas\`.\n`;
 
   const body = JSON.stringify({
     model: "deepseek-chat",
     messages: [
-      {role: "system", content: "Você é um especialista em Path of Exile 2 que respode em português de forma clara e concisa."},
+      {role: "system", content: "Você é um especialista em Path of Exile 2 que cria guias completos em português. Seja detalhista e prático."},
       {role: "user", content: prompt}
     ],
-    max_tokens: 600,
+    max_tokens: 1200,
     temperature: 0.3
   });
 
@@ -268,8 +302,9 @@ async function pesquisar() {
   // Se tiver chave DeepSeek, chama a IA (assíncrono, não bloqueia)
   if (chaveDeepSeek && builds.length > 0) {
     const iaEl = document.getElementById('iaContent');
+    iaEl.innerHTML = '<span class="status">⏳ Analisando com DeepSeek V4 Flash...</span>';
     const analise = await analisarComIA(cls, builds);
-    if (analise) iaEl.innerHTML = analise;
+    iaEl.innerHTML = analise || '<span class="status">⚠️ Não foi possível obter análise da IA. Verifique sua chave ou tente novamente.</span>';
   }
 }
 
@@ -287,7 +322,15 @@ function atualizarDados() {
         if (slugs.has(m[1])) continue;
         slugs.add(m[1]);
         const name = m[2].replace(/Build Guide/gi,'').replace(/Leveling/gi,'').trim();
-        if (name.length > 3) novas.push({n: name.slice(0,80), c: m[1].split('-')[0], u: m[1]});
+        // Extrai classe do alt text (ex: "Storm Wave Monk Build Guide" → "monk")
+        const altWords = m[2].toLowerCase().split(/\s+/);
+        const classSlugs = ['witch','sorceress','ranger','huntress','monk','mercenary','warrior','druid'];
+        const altClass = altWords.find(w => classSlugs.includes(w));
+        // Fallback: extrai classe da URL (ex: "storm-wave-monk" → "monk")
+        const slugPart = m[1].replace(/^\/poe2\/build-guides\//,'').replace(/-build-guide$/,'').split('-');
+        const slugClass = slugPart.find(w => classSlugs.includes(w));
+        const inferredClass = altClass || slugClass || 'unknown';
+        if (name.length > 3) novas.push({n: name.slice(0,80), c: inferredClass, u: m[1]});
       }
       if (novas.length > 5) {
         BUILDS_DATA.length = 0; BUILDS_DATA.push(...novas);
