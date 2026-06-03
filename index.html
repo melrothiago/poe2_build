@@ -135,7 +135,8 @@ function selecionar(slug) {
 const PROXIES = [
   'https://api.allorigins.dev/raw?url=',
   'https://corsproxy.io/?',
-  'https://proxy.cors.sh/'
+  'https://api.allorigins.win/raw?url=',
+  'https://api.codetabs.com/v1/proxy?quest='
 ];
 
 function fetchComProxy(url, timeout=8000) {
@@ -259,7 +260,7 @@ async function pesquisar() {
   loadTxt.textContent = `${todasBuilds.length} builds encontradas. Ordenando...`;
   
   if (todasBuilds.length === 0) {
-    results.innerHTML = `<div class="empty"><span class="em">🔍</span><p>Nenhuma build encontrada para ${CLASSES.find(c=>c.slug===cls)?.name || cls}.</p><p style="color:var(--text2);margin-top:0.5rem">Tente novamente mais tarde — os proxies podem estar congestionados.</p></div>`;
+    results.innerHTML = `<div class="empty"><span class="em">🔍</span><p>Nenhuma build encontrada para ${CLASSES.find(c=>c.slug===cls)?.name || cls}.</p><p style="color:var(--text2);margin-top:0.5rem">As fontes podem estar bloqueando proxies públicos.</p><p style="color:var(--gold);margin-top:0.5rem;font-size:0.85rem">💡 Dica: rode no terminal → <code style="background:var(--card2);padding:0.1rem 0.4rem;border-radius:4px">cd ~/Documentos/poe2_builds && python3 -m http.server 8000</code><br>Depois abra <a href="http://localhost:8000" style="color:var(--gold)">http://localhost:8000</a></p></div>`;
   } else {
     // Ordenar: Reddit com mais upvotes primeiro, depois Maxroll
     todasBuilds.sort((a,b) => (b.score||0) - (a.score||0));
