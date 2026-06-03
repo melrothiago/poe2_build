@@ -187,6 +187,32 @@ function salvarConfig() {
   fecharConfig();
 }
 
+// ─── Renderizador Markdown para respostas da IA ───
+function renderMarkdown(text) {
+  if (!text) return '';
+  text = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // Headers ##
+  text = text.replace(/^## (.+?)(?: {2,})?$/gm, '<h3 style="color:var(--gold);margin:1rem 0 0.5rem;font-size:1rem">$1</h3>');
+  // Parágrafos (dupla quebra → nova seção)
+  text = text.replace(/\n\n/g, '</p><p style="margin:0.5rem 0">');
+  // Quebras de linha simples → espaço (markdown)
+  text = text.replace(/\n(?!<\/?(?:ul|li|h3|p|code|\/h))/g, ' ');
+  // **bold**
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--text)">$1</strong>');
+  // `code`
+  text = text.replace(/`([^`]+)`/g, '<code style="background:var(--card2);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.85em;color:var(--cyan)">$1</code>');
+  // Listas - itens
+  text = text.replace(/(?:^- .+(?:\n|$))+/gm, function(m) {
+    var items = m.trim().split('\n').filter(function(l){return l.trim()}).map(function(l){
+      return '<li style="margin:0.2rem 0;line-height:1.6">' + l.replace(/^- /,'') + '</li>';
+    }).join('');
+    return '<ul style="padding-left:1.2rem;margin:0.5rem 0">' + items + '</ul>';
+  });
+  // Parágrafos
+  text = text.replace(/\n\n/g, '</p><p style="margin:0.5rem 0">');
+  return text;
+}
+
 async function analisarComIA(cls, builds) {
   if (!chaveDeepSeek || builds.length === 0) return null;
   const classeInfo = CLASSES.find(c => c.slug === cls);
@@ -304,7 +330,7 @@ async function pesquisar() {
     const iaEl = document.getElementById('iaContent');
     iaEl.innerHTML = '<span class="status">⏳ Analisando com DeepSeek V4 Flash...</span>';
     const analise = await analisarComIA(cls, builds);
-    iaEl.innerHTML = analise || '<span class="status">⚠️ Não foi possível obter análise da IA. Verifique sua chave ou tente novamente.</span>';
+    iaEl.innerHTML = renderMarkdown(analise) || '<span class="status">⚠️ Não foi possível obter análise da IA. Verifique sua chave ou tente novamente.</span>';
   }
 }
 
