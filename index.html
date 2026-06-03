@@ -8,10 +8,12 @@
 :root{--bg:#0a0a12;--card:#14141f;--card2:#1c1c2e;--border:#2a2a3e;--text:#dedee6;--text2:#8a8a9a;--accent:#c44b2b;--gold:#c7a040;--green:#3da85c;--blue:#4a8fbf;--purple:#8b5cf6;--radius:12px}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
-.hdr{text-align:center;padding:2rem 1rem 0.5rem}
+.hdr{text-align:center;padding:2rem 1rem 0.5rem;position:relative}
 .hdr h1{font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hdr p{color:var(--text2);font-size:0.85rem;margin-top:0.2rem}
 .hdr .sub-info{color:var(--text2);font-size:0.7rem;margin-top:0.3rem}
+.gear{position:absolute;top:1rem;right:1rem;font-size:1.4rem;cursor:pointer;transition:0.2s;background:none;border:none;color:var(--text2)}
+.gear:hover{color:var(--gold);transform:rotate(45deg)}
 .grid{max-width:820px;margin:1rem auto;padding:0 1rem;display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem}
 .card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:0.8rem 0.4rem;cursor:pointer;text-align:center;transition:all 0.2s}
 .card:hover{border-color:var(--accent);transform:translateY(-2px)}
@@ -30,9 +32,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .results{max-width:820px;margin:0 auto 2rem;padding:0 1rem;display:none}
 .results.v{display:block}
 .result-count{text-align:center;color:var(--text2);margin-bottom:1rem;font-size:0.9rem}
+
+/* AI Analysis */
+.ai-card{background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(6,182,212,0.05));border:1px solid var(--purple);border-radius:var(--radius);padding:1.2rem;margin-bottom:1rem}
+.ai-card .head{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.8rem;color:var(--purple);font-weight:700;font-size:0.95rem}
+.ai-card .body{color:var(--text);font-size:0.88rem;line-height:1.7}
+.ai-card .body strong{color:var(--gold)}
+.ai-card .status{color:var(--text2);font-size:0.8rem;text-align:center;padding:1rem}
+.ai-indicator{color:var(--purple);font-size:0.7rem;margin-left:0.5rem}
+
+/* Build Card */
 .build-card{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:0.8rem;position:relative;overflow:hidden}
 .build-card.best{border-color:var(--gold);box-shadow:0 0 20px rgba(199,160,64,0.15)}
-.build-card.best::before{content:'★ MELHOR BUILD';position:absolute;top:10px;right:10px;background:var(--gold);color:var(--bg);font-size:0.6rem;font-weight:800;padding:0.2rem 0.5rem;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px}
+.build-card.best::before{content:'★ MELHOR BUILD';position:absolute;top:10px;right:10px;background:var(--gold);color:var(--bg);font-size:0.6rem;font-weight:800;padding:0.2rem 0.5rem;border-radius:4px}
 .build-top{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.5rem}
 .build-class{font-size:1.2rem;font-weight:700}
 .build-class .em{font-size:1.5rem;margin-right:0.3rem}
@@ -42,20 +54,54 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .build-link:hover{text-decoration:underline}
 .empty{text-align:center;padding:3rem 1rem;color:var(--text2)}
 .empty .em{font-size:3rem;display:block;margin-bottom:1rem}
+
+/* Config Panel */
+.config-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:999}
+.config-overlay.v{display:block}
+.config-panel{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:2rem;width:90%;max-width:400px}
+.config-panel h3{color:var(--gold);margin-bottom:1rem}
+.config-panel label{color:var(--text2);font-size:0.8rem;display:block;margin-bottom:0.3rem}
+.config-panel input[type=text]{width:100%;padding:0.6rem;border:1px solid var(--border);border-radius:8px;background:var(--card2);color:var(--text);font-size:0.85rem;margin-bottom:0.8rem}
+.config-panel input[type=text]:focus{outline:none;border-color:var(--gold)}
+.config-panel .info{color:var(--text2);font-size:0.7rem;margin-bottom:1rem}
+.config-panel .btn-row{display:flex;gap:0.5rem}
+.config-panel .btn-row button{flex:1;padding:0.5rem;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:0.85rem}
+.config-panel .btn-save{background:var(--accent);color:#fff}
+.config-panel .btn-close{background:var(--card2);color:var(--text2);border:1px solid var(--border)!important}
 </style>
 </head>
 <body>
 <div class="hdr">
+  <button class="gear" onclick="abrirConfig()" title="Configurações">⚙</button>
   <h1>PoE2 Builds</h1>
-  <p>Selecione uma classe para ver as melhores builds</p>
+  <p>Selecione uma classe para ver as melhores builds com análise por IA</p>
   <div class="sub-info" id="dataInfo">📦 Dados embedados · <span id="dataDate"></span></div>
 </div>
+
 <div class="grid" id="grid"></div>
 <div class="btn-wrap">
   <button class="btn" id="btn" onclick="pesquisar()">🔍 Ver Builds</button>
   <button class="btn-sm" onclick="atualizarDados()">🔄 Atualizar dados do Maxroll</button>
 </div>
 <div class="results" id="results"></div>
+
+<!-- Config Panel -->
+<div class="config-overlay" id="configOverlay">
+  <div class="config-panel">
+    <h3>⚙ Configurações</h3>
+    <label>🔑 Chave da API DeepSeek</label>
+    <input type="text" id="deepseekKey" placeholder="sk-..." />
+    <div class="info">
+      • Usa DeepSeek V4 Flash (grátis) para analisar as builds<br/>
+      • Obtenha sua chave em <a href="https://platform.deepseek.com/api_keys" target="_blank" style="color:var(--gold)">platform.deepseek.com</a><br/>
+      • Sem chave, mostra apenas as builds coletadas
+    </div>
+    <div class="btn-row">
+      <button class="btn-close" onclick="fecharConfig()">Fechar</button>
+      <button class="btn-save" onclick="salvarConfig()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════
@@ -76,11 +122,11 @@ const BUILDS_DATA = [
   {n:"Grenade Mercenary Guide",c:"mercenary",u:"/poe2/build-guides/grenade-mercenary-guide-witchhunter-tactician-build-guide"},
   {n:"The Spear Huntress Guide",c:"huntress",u:"/poe2/build-guides/the-spear-huntress-guide-build-guide"},
   {n:"Entangle Oracle",c:"druid",u:"/poe2/build-guides/entangle-oracle-build-guide"},
-  {n:"Ice Strike Invoker Monk",c:"monk",u:"/poe2/build-guides/ice-strike-invoker-monk-leveling-build-guide"},
+  {n:"Ice Strike Invoker Monk Leveling",c:"monk",u:"/poe2/build-guides/ice-strike-invoker-monk-leveling-build-guide"},
   {n:"Ice Nova Snap Stormweaver",c:"sorceress",u:"/poe2/build-guides/ice-nova-snap-stormweaver-build-guide"},
   {n:"Falling Thunder Invoker",c:"monk",u:"/poe2/build-guides/falling-thunder-invoker-build-guide"},
   {n:"The Shapeshift Druid Guide",c:"druid",u:"/poe2/build-guides/the-shapeshift-druid-guide-build-guide"},
-  {n:"Frostbolt Cast On Crit Comet Stormweaver",c:"sorceress",u:"/poe2/build-guides/frostbolt-cast-on-crit-comet-stormweaver-endgame-build-guide"}
+  {n:"Frostbolt Cast On Crit Comet Stormweaver Endgame",c:"sorceress",u:"/poe2/build-guides/frostbolt-cast-on-crit-comet-stormweaver-endgame-build-guide"}
 ];
 
 const CLASSES = [
@@ -99,20 +145,23 @@ const CLASSES = [
 ];
 
 let classeSelecionada = null;
+let chaveDeepSeek = localStorage.getItem('deepseekKey') || '';
 
 document.getElementById('dataDate').textContent = new Date().toLocaleDateString('pt-BR');
+if (chaveDeepSeek) document.getElementById('deepseekKey').value = chaveDeepSeek;
 
 function montarGrid() {
   const grid = document.getElementById('grid');
   grid.innerHTML = CLASSES.map(c => {
     const count = BUILDS_DATA.filter(b => b.c === c.slug).length;
-    return `<div class="card${c.locked?' locked':''}${c.slug===classeSelecionada?' sel':''}" 
-         ${!c.locked ? `onclick="selecionar('${c.slug}')"` : ''}>
+    let html = `<div class="card${c.locked?' locked':''}${c.slug===classeSelecionada?' sel':''}" ${!c.locked ? `onclick="selecionar('${c.slug}')"` : ''}>
       <span class="em">${c.emoji}</span>
       <span class="nm">${c.name}</span>
-      <span class="sub">${c.asc}</span>
-      ${c.locked ? '<span class="sub">Em breve</span>' : `<span class="sub">${count} builds</span>`}
-    </div>`;
+      <span class="sub">${c.asc}</span>`;
+    if (c.locked) html += '<span class="sub">Em breve</span>';
+    else html += `<span class="sub">${count} builds</span>`;
+    html += '</div>';
+    return html;
   }).join('');
 }
 
@@ -122,79 +171,132 @@ function selecionar(slug) {
   pesquisar();
 }
 
-function pesquisar() {
+function abrirConfig() {
+  document.getElementById('deepseekKey').value = chaveDeepSeek;
+  document.getElementById('configOverlay').classList.add('v');
+}
+function fecharConfig() { document.getElementById('configOverlay').classList.remove('v'); }
+function salvarConfig() {
+  chaveDeepSeek = document.getElementById('deepseekKey').value.trim();
+  localStorage.setItem('deepseekKey', chaveDeepSeek);
+  fecharConfig();
+}
+
+async function analisarComIA(cls, builds) {
+  if (!chaveDeepSeek || builds.length === 0) return null;
+  const classeInfo = CLASSES.find(c => c.slug === cls);
+  const nomesBuilds = builds.map(b => b.n).join(', ');
+  
+  const prompt = `Você é um especialista em Path of Exile 2. Analise as seguintes builds para a classe **${classeInfo?.name}** (${classeInfo?.emoji}) e responda EM PORTUGUÊS:
+
+Builds disponíveis: ${nomesBuilds}
+
+Explique:
+1. 📊 **Visão Geral** — O meta atual para ${classeInfo?.name} na temporada Return of the Ancients
+2. 🏆 **Melhor Build** — Qual é a melhor build entre estas e por quê
+3. 🎯 **Para Iniciantes** — Qual build é mais amigável para começar a temporada
+4. ⚡ **Para Endgame** — Qual build escala melhor para conteúdo avançado
+5. 💡 **Dica Rápida** — Uma dica importante sobre a classe
+
+Seja conciso (máx 250 palavras). Use emojis e formatação amigável.`;
+
+  const body = JSON.stringify({
+    model: "deepseek-chat",
+    messages: [
+      {role: "system", content: "Você é um especialista em Path of Exile 2 que respode em português de forma clara e concisa."},
+      {role: "user", content: prompt}
+    ],
+    max_tokens: 600,
+    temperature: 0.3
+  });
+
+  try {
+    const resp = await fetch("https://api.deepseek.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + chaveDeepSeek
+      },
+      body: body
+    });
+    const data = await resp.json();
+    if (data.error) return `<p style="color:var(--accent)">⚠️ Erro da DeepSeek: ${data.error.message}</p>`;
+    return data.choices?.[0]?.message?.content?.replace(/\n/g, '<br>') || 'Sem resposta.';
+  } catch (e) {
+    return `<p style="color:var(--accent)">⚠️ Falha ao conectar com DeepSeek: ${e.message}</p>`;
+  }
+}
+
+async function pesquisar() {
   if (!classeSelecionada) return;
   const cls = classeSelecionada;
   const results = document.getElementById('results');
   const btn = document.getElementById('btn');
   const classeInfo = CLASSES.find(c => c.slug === cls);
+  
+  btn.disabled = true;
+  btn.textContent = '🔍 Buscando...';
 
   const builds = BUILDS_DATA.filter(b => b.c === cls);
-  const embedCount = builds.length;
-
-  if (embedCount === 0) {
-    results.innerHTML = `<div class="empty"><span class="em">🔍</span><p>Nenhuma build embedada para ${classeInfo?.name}.</p></div>`;
-    results.classList.add('v');
-    return;
-  }
-
-  let html = `<div class="result-count">🔎 <strong>${embedCount} builds</strong> para ${classeInfo?.emoji} <strong>${classeInfo?.name}</strong></div>`;
+  let html = '';
   
-  builds.forEach((b, i) => {
-    html += `
-      <div class="build-card${i===0?' best':''}">
-        <div class="build-top">
-          <span class="build-class">${classeInfo?.emoji} ${b.n}</span>
-        </div>
-        <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin:0.5rem 0">
-          <span class="tag tag-source">📋 Maxroll</span>
-        </div>
+  // Card de análise IA
+  const iaKey = chaveDeepSeek ? ' (' + chaveDeepSeek.slice(0,8) + '...)' : '';
+  html += `<div class="ai-card">
+    <div class="head">🤖 Análise por IA${iaKey}</div>
+    <div class="body" id="iaContent"><span class="status">${chaveDeepSeek ? '⏳ Analisando com DeepSeek V4 Flash...' : '⚙️ Configure sua chave DeepSeek no ⚙ para análise por IA das builds.'}</span></div>
+  </div>`;
+
+  if (builds.length > 0) {
+    html += `<div class="result-count">📋 <strong>${builds.length} builds</strong> encontradas para ${classeInfo?.emoji} <strong>${classeInfo?.name}</strong></div>`;
+    builds.forEach((b, i) => {
+      html += `<div class="build-card${i===0?' best':''}">
+        <div class="build-top"><span class="build-class">${classeInfo?.emoji} ${b.n}</span></div>
+        <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin:0.5rem 0"><span class="tag tag-source">📋 Maxroll</span></div>
         <a class="build-link" href="https://maxroll.gg${b.u}" target="_blank" rel="noopener">🔗 Ver build completa →</a>
       </div>`;
-  });
+    });
+  } else {
+    html += `<div class="empty"><span class="em">🔍</span><p>Nenhuma build para ${classeInfo?.name} ainda.</p></div>`;
+  }
 
   results.innerHTML = html;
   results.classList.add('v');
+  btn.disabled = false;
+  btn.textContent = '🔍 Ver Builds';
+
+  // Se tiver chave DeepSeek, chama a IA (assíncrono, não bloqueia)
+  if (chaveDeepSeek && builds.length > 0) {
+    const iaEl = document.getElementById('iaContent');
+    const analise = await analisarComIA(cls, builds);
+    if (analise) iaEl.innerHTML = analise;
+  }
 }
 
 function atualizarDados() {
   const info = document.getElementById('dataInfo');
   info.innerHTML = '🔄 Atualizando...';
-  
   const proxy = 'https://api.allorigins.dev/raw?url=';
   const url = 'https://maxroll.gg/poe2/build-guides';
-  
   fetch(proxy + encodeURIComponent(url))
     .then(r => r.text())
     .then(html => {
       const regex = /<a[^>]*href="(\/poe2\/build-guides\/[^"]*)"[^>]*>.*?<img[^>]*alt="([^"]*build[^"]*guide[^"]*)"[^>]*>/gi;
-      const novas = [];
-      const slugs = new Set();
-      let m;
+      const novas = []; const slugs = new Set(); let m;
       while ((m = regex.exec(html)) !== null) {
-        const slug = m[1];
-        if (slugs.has(slug)) continue;
-        slugs.add(slug);
+        if (slugs.has(m[1])) continue;
+        slugs.add(m[1]);
         const name = m[2].replace(/Build Guide/gi,'').replace(/Leveling/gi,'').trim();
-        if (name.length > 3) {
-          novas.push({n: name.slice(0,80), c: slug.split('-')[0], u: slug});
-        }
+        if (name.length > 3) novas.push({n: name.slice(0,80), c: m[1].split('-')[0], u: m[1]});
       }
       if (novas.length > 5) {
-        BUILDS_DATA.length = 0;
-        BUILDS_DATA.push(...novas);
+        BUILDS_DATA.length = 0; BUILDS_DATA.push(...novas);
         if (classeSelecionada) pesquisar();
-        info.innerHTML = `✅ Atualizado! ${novas.length} builds do Maxroll · ${new Date().toLocaleDateString('pt-BR')}`;
-      } else {
-        info.innerHTML = '⚠️ Não foi possível atualizar. Tente mais tarde.';
-      }
-    })
-    .catch(() => {
-      info.innerHTML = '⚠️ Falha ao atualizar. Proxy indisponível.';
-    });
+        info.innerHTML = `✅ Atualizado! ${novas.length} builds · ${new Date().toLocaleDateString('pt-BR')}`;
+      } else info.innerHTML = '⚠️ Falha ao atualizar.';
+    }).catch(() => { info.innerHTML = '⚠️ Proxy indisponível.'; });
 }
 
-// Init
 montarGrid();
 </script>
 </body>
