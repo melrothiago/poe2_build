@@ -5,12 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PoE2 Builds</title>
 <style>
+:root {
+  --bg: #0a0a12; --card: #14141f; --card2: #1c1c2e; --border: #2a2a3e;
+  --text: #dedee6; --text2: #8a8a9a; --accent: #c44b2b; --gold: #c7a040;
+  --green: #3da85c; --blue: #4a8fbf; --purple: #8b5cf6; --radius: 12px;
+}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0a12;--card:#14141f;--card2:#1c1c2e;--border:#2a2a3e;--text:#dedee6;--text2:#8a8a9a;--accent:#c44b2b;--gold:#c7a040;--green:#3da85c;--blue:#4a8fbf;--purple:#8b5cf6;--cyan:#06b6d4;--pink:#ec4899;--orange:#f59e0b;--radius:12px}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+
+/* Header */
 .hdr{text-align:center;padding:2rem 1rem 0.5rem}
 .hdr h1{font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hdr p{color:var(--text2);font-size:0.85rem;margin-top:0.2rem}
+
+/* Class Grid */
 .grid{max-width:820px;margin:1rem auto;padding:0 1rem;display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem}
 .card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:0.8rem 0.4rem;cursor:pointer;text-align:center;transition:all 0.2s}
 .card:hover{border-color:var(--accent);transform:translateY(-2px)}
@@ -18,13 +26,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .card .em{font-size:2rem;display:block;margin-bottom:0.2rem}
 .card .nm{font-weight:700;font-size:0.85rem}
 .card .sub{color:var(--text2);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px}
-.card .pop{font-size:0.6rem;color:var(--gold);margin-top:0.1rem}
 .card.locked{opacity:0.35;cursor:not-allowed;filter:grayscale(0.7)}
 .card.locked:hover{border-color:var(--border);transform:none}
+
+/* Search button */
 .btn-wrap{text-align:center;margin:0.8rem 0;padding:0 1rem}
-.btn{background:var(--accent);color:#fff;border:none;padding:0.8rem 2.5rem;font-size:1.05rem;font-weight:700;border-radius:10px;cursor:pointer;transition:all 0.2s;width:100%;max-width:300px;opacity:0.5;pointer-events:none}
-.btn.pronto{opacity:1;pointer-events:auto}
-.btn.pronto:hover{background:#d85a38;transform:scale(1.02)}
+.btn{background:var(--accent);color:#fff;border:none;padding:0.8rem 2.5rem;font-size:1.05rem;font-weight:700;border-radius:10px;cursor:pointer;transition:all 0.2s;width:100%;max-width:300px}
+.btn:hover{background:#d85a38;transform:scale(1.02)}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+/* Loading */
 .loading{max-width:600px;margin:0 auto 1.5rem;padding:0 1rem;display:none}
 .loading.v{display:block}
 .barra{height:5px;background:var(--card2);border-radius:3px;overflow:hidden;margin-bottom:0.5rem}
@@ -32,829 +43,259 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .load-txt{text-align:center;color:var(--text2);font-size:0.85rem}
 .load-src{display:flex;flex-wrap:wrap;gap:0.3rem;justify-content:center;margin-top:0.4rem}
 .ls{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:0.1rem 0.5rem;font-size:0.7rem;color:var(--text2)}
-.rep{max-width:820px;margin:0 auto 2rem;padding:0 1rem;display:none}
-.rep.v{display:block}
+.ls.ok{color:var(--green);border-color:var(--green)}
+.ls.fail{color:var(--accent);border-color:var(--accent);text-decoration:line-through}
 
-/* === MAXROLL-STYLE === */
-/* Meta Banner */
-.meta-banner{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:1rem;position:relative;overflow:hidden}
-.meta-banner::before{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(196,75,43,0.08) 0%,transparent 70%);pointer-events:none}
-.meta-banner .mb-top{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.5rem}
-.meta-banner .mb-class{font-size:1.4rem;font-weight:700}
-.meta-banner .mb-class .em{font-size:1.6rem;margin-right:0.3rem}
-.meta-banner .tag{display:inline-block;padding:0.15rem 0.5rem;border-radius:20px;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.3px}
-.tag-season{background:rgba(196,75,43,0.2);color:var(--accent);border:1px solid rgba(196,75,43,0.3)}
-.tag-version{background:rgba(199,160,64,0.15);color:var(--gold);border:1px solid rgba(199,160,64,0.25)}
-.tag-playstyle{background:rgba(61,168,92,0.15);color:var(--green);border:1px solid rgba(61,168,92,0.25)}
-.tag-class{background:rgba(74,143,191,0.15);color:var(--blue);border:1px solid rgba(74,143,191,0.25)}
-.tag-score{background:rgba(139,92,246,0.15);color:var(--purple);border:1px solid rgba(139,92,246,0.25)}
-.meta-banner .mb-info{display:flex;flex-wrap:wrap;gap:1rem;margin-top:0.5rem}
-.meta-banner .mb-info-item{font-size:0.8rem;color:var(--text2)}
-.meta-banner .mb-info-item strong{color:var(--text)}
-.score-badge{display:inline-flex;align-items:center;gap:0.3rem;background:rgba(61,168,92,0.15);border:1px solid rgba(61,168,92,0.3);border-radius:20px;padding:0.2rem 0.6rem;font-size:0.78rem;font-weight:600;color:var(--green)}
-.score-badge.med{background:rgba(245,158,11,0.15);border-color:rgba(245,158,11,0.3);color:var(--orange)}
-.score-badge.low{background:rgba(196,75,43,0.15);border-color:rgba(196,75,43,0.3);color:var(--accent)}
+/* Results */
+.results{max-width:820px;margin:0 auto 2rem;padding:0 1rem;display:none}
+.results.v{display:block}
+.result-count{text-align:center;color:var(--text2);margin-bottom:1rem;font-size:0.9rem}
 
-/* Section */
-.sec{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;margin-bottom:0.8rem}
-.sec h2{font-size:1rem;margin-bottom:0.6rem;color:var(--gold);display:flex;align-items:center;gap:0.4rem}
-.sec h2 .sec-icon{font-size:1.1rem}
+/* Build Card */
+.build-card{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:0.8rem;position:relative;overflow:hidden}
+.build-card.best{border-color:var(--gold);box-shadow:0 0 20px rgba(199,160,64,0.15)}
+.build-card.best::before{content:'★ MELHOR BUILD';position:absolute;top:10px;right:10px;background:var(--gold);color:var(--bg);font-size:0.6rem;font-weight:800;padding:0.2rem 0.5rem;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px}
+.build-top{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.5rem}
+.build-class{font-size:1.2rem;font-weight:700}
+.build-class .em{font-size:1.5rem;margin-right:0.3rem}
+.tag{display:inline-block;padding:0.15rem 0.5rem;border-radius:20px;font-size:0.65rem;font-weight:600;text-transform:uppercase}
+.tag-source{background:rgba(74,143,191,0.15);color:var(--blue);border:1px solid rgba(74,143,191,0.25)}
+.tag-archetype{background:rgba(61,168,92,0.15);color:var(--green);border:1px solid rgba(61,168,92,0.25)}
+.build-info{display:flex;flex-wrap:wrap;gap:1rem;margin:0.5rem 0}
+.build-info-item{font-size:0.8rem;color:var(--text2)}
+.build-info-item strong{color:var(--text)}
+.build-link{display:inline-block;margin-top:0.5rem;color:var(--gold);text-decoration:none;font-weight:600;font-size:0.85rem}
+.build-link:hover{text-decoration:underline}
 
-/* Build Cards */
-.build-card{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:0.7rem 0.9rem;margin-bottom:0.5rem}
-.build-card:last-child{margin-bottom:0}
-.build-card .bc-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.3rem}
-.build-card .bc-title{font-weight:600;font-size:0.88rem;color:var(--text)}
-.build-card .bc-title a{color:var(--blue);text-decoration:none}
-.build-card .bc-title a:hover{text-decoration:underline}
-.build-card .bc-meta{font-size:0.7rem;color:var(--text2);margin-top:0.2rem}
-.build-card .bc-meta .bc-author{color:var(--gold);font-weight:500}
-.build-card .bc-tags{display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:0.3rem}
-.build-card .bc-desc{font-size:0.78rem;color:var(--text2);margin-top:0.3rem;line-height:1.4}
-.build-card .bc-skills{display:flex;flex-wrap:wrap;gap:0.25rem;margin-top:0.35rem}
-.build-card .bc-skills .s{padding:0.1rem 0.4rem;border-radius:5px;font-size:0.7rem;border:1px solid}
-.s-com{border-color:rgba(61,168,92,0.3);color:var(--green)}
-.s-a{border-color:rgba(199,160,64,0.3);color:var(--gold)}
-.s-b{border-color:rgba(74,143,191,0.3);color:var(--blue)}
-.s-uniq{border-color:rgba(139,92,246,0.3);color:var(--purple)}
-.build-card .bc-stats{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.3rem;font-size:0.7rem;color:var(--text2)}
-.build-card .bc-stats .bc-stat strong{color:var(--text)}
-
-/* Intro paragraph */
-.intro-text{font-size:0.85rem;color:var(--text2);line-height:1.6}
-
-/* Skills Table */
-.skills-table{width:100%;border-collapse:collapse;font-size:0.78rem}
-.skills-table th{padding:0.4rem 0.6rem;text-align:left;background:var(--card2);color:var(--gold);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid var(--border)}
-.skills-table td{padding:0.4rem 0.6rem;border-bottom:1px solid rgba(42,42,62,0.5);color:var(--text2)}
-.skills-table td:first-child{color:var(--text);font-weight:500}
-.skills-table .gems{display:flex;flex-wrap:wrap;gap:0.2rem}
-.skills-table .gem{padding:0.05rem 0.35rem;border-radius:4px;font-size:0.68rem;border:1px solid rgba(61,168,92,0.2);color:var(--green)}
-
-/* Item Cards */
-.item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.5rem}
-.item-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.8rem}
-.item-card .ic-name{font-weight:600;font-size:0.82rem;color:var(--text)}
-.item-card .ic-type{font-size:0.65rem;color:var(--text2);text-transform:uppercase}
-.item-card .ic-build{font-size:0.7rem;color:var(--blue);margin-top:0.15rem}
-.item-card .ic-motivo{font-size:0.72rem;color:var(--text2);margin-top:0.1rem}
-
-/* Comparison */
-.cmp-text{font-size:0.82rem;color:var(--text2);line-height:1.6;padding:0.8rem;background:var(--card2);border-radius:8px;border-left:3px solid var(--gold)}
-
-/* Tabs */
-.tabs{display:flex;gap:0.3rem;margin-bottom:0.6rem;flex-wrap:wrap}
-.tab{padding:0.3rem 0.8rem;border-radius:6px;font-size:0.78rem;font-weight:500;cursor:pointer;background:var(--card2);border:1px solid var(--border);color:var(--text2);transition:all 0.15s}
-.tab:hover{border-color:var(--accent);color:var(--text)}
-.tab.ativo{background:rgba(196,75,43,0.15);border-color:var(--accent);color:var(--accent)}
-.tab-conteudo{display:none}
-.tab-conteudo.ativo{display:block}
-
-/* Dicas */
-.dicas-list{list-style:none;padding:0}
-.dicas-list li{padding:0.35rem 0;font-size:0.78rem;color:var(--text2);border-bottom:1px solid rgba(42,42,62,0.3)}
-.dicas-list li:last-child{border-bottom:none}
-.dicas-list li::before{content:'\\25B8';color:var(--gold);margin-right:0.4rem}
-
-/* Mechanics */
-.mech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0.5rem}
-.mech-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.8rem}
-.mech-card .mc-name{font-weight:600;font-size:0.8rem;color:var(--gold);margin-bottom:0.2rem}
-.mech-card .mc-desc{font-size:0.72rem;color:var(--text2);line-height:1.4}
-
-/* Sources */
-.src-list{display:flex;flex-wrap:wrap;gap:0.3rem}
-.src-item{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:0.15rem 0.5rem;font-size:0.65rem;color:var(--text2)}
-.src-item.ok{border-color:rgba(61,168,92,0.3);color:var(--green)}
-.src-item.fail{border-color:rgba(196,75,43,0.3);color:var(--accent)}
-.src-item.cache{background:rgba(199,160,64,0.1);border-color:rgba(199,160,64,0.2);color:var(--gold)}
-
-/* Cache indicator */
-.cache-badge{display:inline-block;font-size:0.65rem;padding:0.1rem 0.4rem;border-radius:4px;color:var(--text2);margin-left:0.3rem}
-.cache-badge.hit{background:rgba(61,168,92,0.1);color:var(--green)}
-.cache-badge.miss{background:rgba(196,75,43,0.1);color:var(--accent)}
-
-/* Config Panel (mesmo do D4 Builds) */
-.gear{position:fixed;top:0.5rem;right:0.5rem;background:none;border:none;color:var(--text2);font-size:1.3rem;cursor:pointer;z-index:10;padding:0.3rem;border-radius:50%;width:2rem;height:2rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
-.gear:hover{background:var(--card2);color:var(--text)}
-.config{position:fixed;top:0;right:-400px;width:360px;max-width:90vw;height:100vh;background:var(--card);border-left:1px solid var(--border);z-index:20;transition:right 0.3s;overflow-y:auto;padding:1.2rem}
-.config.aberto{right:0}
-.config h3{color:var(--gold);margin-bottom:1rem}
-.config label{display:block;font-size:0.78rem;color:var(--text2);margin:0.8rem 0 0.3rem}
-.config input{width:100%;padding:0.4rem 0.6rem;background:var(--card2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.8rem}
-.config input:focus{border-color:var(--accent);outline:none}
-.config .info{font-size:0.68rem;color:var(--text2);margin:0.2rem 0 0.6rem}
-.config .btn-save{background:var(--accent);color:#fff;border:none;padding:0.5rem 1rem;border-radius:6px;cursor:pointer;font-weight:600;margin-top:0.5rem;width:100%}
-.config .btn-save:hover{background:#d85a38}
-.config .fechar{position:absolute;top:0.5rem;right:0.5rem;background:none;border:none;color:var(--text2);font-size:1.2rem;cursor:pointer}
-.overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:19;display:none}
-.overlay.v{display:block}
-.chave-indicator{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:0.3rem}
-.chave-on{background:var(--green)}
-.chave-off{background:var(--text2)}
-
-/* Error */
-.err-msg{text-align:center;padding:2rem 1rem;color:var(--text2);font-size:0.9rem}
-
-/* Footer */
-.ft{text-align:center;padding:1rem;color:var(--text2);font-size:0.65rem;opacity:0.3}
-
-@media(max-width:500px){
-  .grid{grid-template-columns:repeat(4,1fr);gap:0.4rem}
-  .card{padding:0.5rem 0.2rem}
-  .card .em{font-size:1.5rem}
-  .card .nm{font-size:0.75rem}
-  .hdr h1{font-size:1.4rem}
-  .meta-banner .mb-class{font-size:1.1rem}
-  .item-grid{grid-template-columns:1fr}
-  .mech-grid{grid-template-columns:1fr}
-  .skills-table{font-size:0.7rem}
-}
+/* Empty state */
+.empty{text-align:center;padding:3rem 1rem;color:var(--text2)}
+.empty .em{font-size:3rem;display:block;margin-bottom:1rem}
 </style>
 </head>
 <body>
+
 <div class="hdr">
   <h1>PoE2 Builds</h1>
-  <p>Pesquise as melhores builds de Path of Exile 2 em TODAS as fontes disponiveis &mdash; Temporada Runes of Aldur (Return of the Ancients 0.5.0)</p>
+  <p>Selecione uma classe e clique em Pesquisar — encontraremos as melhores builds nas principais fontes</p>
 </div>
+
 <div class="grid" id="grid"></div>
+
 <div class="btn-wrap">
-  <button class="btn" id="btn" onclick="pesquisar()">Pesquisar</button>
+  <button class="btn" id="btn" onclick="pesquisar()">🔍 Pesquisar</button>
 </div>
+
 <div class="loading" id="loading">
   <div class="barra"><div class="fill" id="fill"></div></div>
-  <div class="load-txt" id="loadTxt">Preparando...</div>
+  <div class="load-txt" id="loadTxt">Iniciando...</div>
   <div class="load-src" id="loadSrc"></div>
 </div>
-<div class="rep" id="rep"></div>
-<div class="ft">PoE2 Builds v1.0 — Runes of Aldur / Return of the Ancients 0.5.0 — Dados coletados de todas as fontes disponiveis</div>
-<button class="gear" onclick="abrirConfig()" title="Configuracoes">&#9881;</button>
-<div class="overlay" id="overlay" onclick="fecharConfig()"></div>
-<div class="config" id="config">
-  <button class="fechar" onclick="fecharConfig()">&#10005;</button>
-  <h3>Configuracoes</h3>
-  <p style="font-size:0.78rem;color:var(--text2);margin-bottom:1rem;">Forneca sua chave DeepSeek para analise completa por IA.</p>
-  <label>DeepSeek API Key <span class="chave-indicator" id="ds-ind" style="background:var(--text2)"></span></label>
-  <input type="password" id="ds-key" placeholder="sk-...">
-  <div class="info">Modelo: deepseek-v4-flash (Thinking Mode). Cache hit: $0.0028/1M tok.<br>https://platform.deepseek.com/api_keys</div>
-  <button class="btn-save" onclick="salvarChaves()">Salvar</button>
-  <div style="font-size:0.7rem;color:var(--text2);margin-top:0.8rem;padding:0.5rem;background:var(--card2);border-radius:6px;">
-    <strong>Sem chave?</strong> O app mostra dados brutos coletados das fontes. Com chave DeepSeek, voce tem analise completa com meta, comparacoes, dicas e mais.
-  </div>
-  <div style="font-size:0.7rem;color:var(--text2);margin-top:0.5rem;padding:0.5rem;background:var(--card2);border-radius:6px;">
-    <strong>Fontes consultadas:</strong> Maxroll, Mobalytics, Icy Veins, PoE Ninja, Reddit (r/pathofexile + r/pathofexile2builds), Forum Oficial GGG, YouTube, PoeBuilds.io, Poe-Vault.
-  </div>
-</div>
+
+<div class="results" id="results"></div>
+
 <script>
-// ============================================================
-// PoE2 Builds — Pesquisa Inteligente com DeepSeek V4 Flash
-// ============================================================
-// Fontes consultadas para TODAS as builds possiveis por liga:
-// 1. Maxroll — Sitemap XML (/poe2/sitemap.xml) via proxy CORS
-// 2. Mobalytics — Site principal via proxy CORS
-// 3. Icy Veins — Site principal via proxy CORS
-// 4. PoE Ninja — Dados de popularidade de ascendencias
-// 5. Reddit — API oficial CORS (r/pathofexile2, r/pathofexile, r/pathofexile2builds)
-// 6. Forum GGG — Path of Exile forum (build sharing section)
-// 7. YouTube — Busca Brave Search API (se configurada)
-// 8. PoeBuilds.io — Site via proxy CORS
-// 9. Poe-Vault — Site via proxy CORS
-// ============================================================
-
-var CLASSES = [
-  {slug:'monk', nome:'Monk', em:'🥋', ascend:['Invoker','Acolyte of Chayula','Martial Artist'], pop:'25%', locked:false},
-  {slug:'huntress', nome:'Huntress', em:'🏹', ascend:['Amazon','Ritualist','Spirit Walker'], pop:'17%', locked:false},
-  {slug:'ranger', nome:'Ranger', em:'🏹', ascend:['Deadeye','Pathfinder','Tactician'], pop:'14%', locked:false},
-  {slug:'mercenary', nome:'Mercenary', em:'🔫', ascend:['Witchhunter','Gemling Legionnaire'], pop:'4%', locked:false},
-  {slug:'sorceress', nome:'Sorceress', em:'🪄', ascend:['Stormweaver','Chronomancer','Oracle'], pop:'5%', locked:false},
-  {slug:'witch', nome:'Witch', em:'💀', ascend:['Infernalist','Blood Mage','Lich'], pop:'4%', locked:false},
-  {slug:'warrior', nome:'Warrior', em:'🛡️', ascend:['Titan','Warbringer','Smith of Kitava'], pop:'2%', locked:false},
-  {slug:'druid', nome:'Druid', em:'🐻', ascend:['Shaman','Disciple of Varashta'], pop:'4%', locked:false},
-  {slug:'marauder', nome:'Marauder', em:'🔒', ascend:[], pop:'—', locked:true},
-  {slug:'shadow', nome:'Shadow', em:'🔒', ascend:[], pop:'—', locked:true},
-  {slug:'duelist', nome:'Duelist', em:'🔒', ascend:[], pop:'—', locked:true},
-  {slug:'templar', nome:'Templar', em:'🔒', ascend:[], pop:'—', locked:true},
+// ─── Classes do PoE2 ───
+const CLASSES = [
+  {slug:'witch',name:'Bruxa',emoji:'💀',asc:'Infernalist, Blood Mage',locked:false},
+  {slug:'sorceress',name:'Feiticeira',emoji:'🪄',asc:'Stormweaver, Chronomancer',locked:false},
+  {slug:'ranger',name:'Patrulheira',emoji:'🏹',asc:'Deadeye, Pathfinder',locked:false},
+  {slug:'huntress',name:'Caçadora',emoji:'🗡️',asc:'Amazon, Ritualist',locked:false},
+  {slug:'monk',name:'Monge',emoji:'🥋',asc:'Invoker, Acolyte of Chayula',locked:false},
+  {slug:'mercenary',name:'Mercenário',emoji:'🔫',asc:'Witchhunter, Gemling Legionnaire',locked:false},
+  {slug:'warrior',name:'Guerreiro',emoji:'🛡️',asc:'Titan, Warbringer',locked:false},
+  {slug:'druid',name:'Druida',emoji:'🐻',asc:'Shaman, Disciple of Varashta',locked:false},
+  {slug:'marauder',name:'Bárbaro',emoji:'💪',asc:'—',locked:true},
+  {slug:'duelist',name:'Duelista',emoji:'⚔️',asc:'—',locked:true},
+  {slug:'shadow',name:'Sombra',emoji:'🌑',asc:'—',locked:true},
+  {slug:'templar',name:'Templário',emoji:'✝️',asc:'—',locked:true}
 ];
 
-var CLASS_KEYWORDS = {
-  monk:['monk','invoker','chayula','martial artist','whirling assault','tempest flurry','siphoning strike','charged staff','falling thunder','shattering palm','power charge','combo','bell','meditation','stagger','stun','dodge roll'],
-  huntress:['huntress','amazon','ritualist','spirit walker','spear','throw','javelin','ritual','spirit','agility','evasion','poison','bleed','pierce','whirlwind','rain of spears','impale'],
-  ranger:['ranger','deadeye','pathfinder','tactician','bow','arrow','projectile','poison','lightning arrow','rain of arrows','barrage','point blank','chain','fork','trap','mine','toxic'],
-  mercenary:['mercenary','witchhunter','gemling legionnaire','crossbow','grenade','explosive','piercing','ballista','turret','trap','cluster grenade','oil','incendiary','volley','snipe'],
-  sorceress:['sorceress','stormweaver','chronomancer','oracle','frost','fire','lightning','spark','arc','fireball','frostbolt','ice nova','lightning warp','temporal','cold snap','elemental'],
-  witch:['witch','infernalist','blood mage','lich','minion','skeleton','zombie','spectre','chaos','curse','blight','essence drain','contagion','offering','desecrate','bone offering'],
-  warrior:['warrior','titan','warbringer','smith of kitava','earth','sunder','earthquake','shield','shield charge','leap slam','ground slam','herald','ash','warcry','endurance','stun'],
-  druid:['druid','shaman','disciple of varashta','shapeshift','bear','wolf','storm','lightning','summon','totem','earth','wind','hurricane','maul','claw','pack leader'],
-};
+let classeSelecionada = null;
+let ocupado = false;
 
-var PROXIES = [
-  'https://api.allorigins.win/raw?url=',
-  'https://api.codetabs.com/v1/proxy?quest=',
-  'https://corsproxy.io/?url=',
+function montarGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = CLASSES.map(c => 
+    `<div class="card${c.locked?' locked':''}${c.slug===classeSelecionada?' sel':''}" 
+         ${!c.locked ? `onclick="selecionar('${c.slug}')"` : ''}>
+      <span class="em">${c.emoji}</span>
+      <span class="nm">${c.name}</span>
+      <span class="sub">${c.asc}</span>
+      ${c.locked ? '<span class="sub">Em breve</span>' : ''}
+    </div>`
+  ).join('');
+}
+
+function selecionar(slug) {
+  classeSelecionada = slug;
+  montarGrid();
+}
+
+// ─── Proxy CORS ───
+const PROXIES = [
+  'https://api.allorigins.dev/raw?url=',
+  'https://corsproxy.io/?',
+  'https://proxy.cors.sh/'
 ];
 
-// FONTES: TODAS AS FONTES POSSIVEIS DE BUILD DE POE2
-var FONTES = {
-  Maxroll: { url:'https://maxroll.gg/poe2/build-guides', ativa:true },
-  Mobalytics: { url:'https://mobalytics.gg/poe-2/builds', ativa:true },
-  'Icy Veins': { url:'https://www.icy-veins.com/poe2/builds/', ativa:true },
-  'PoE Ninja': { url:'https://poe.ninja/poe2/builds', ativa:true },
-  Reddit: { url:'https://www.reddit.com/r/pathofexile2builds/', ativa:true },
-  'Forum GGG': { url:'https://www.pathofexile.com/forum/view-forum/path-of-exile-2-character-builds', ativa:true },
-  'PoeBuilds.io': { url:'https://poebuilds.io/poe2', ativa:true },
-  'Poe-Vault': { url:'https://www.poe-vault.com/poe2/builds', ativa:true },
-};
-
-// Sitemaps para busca estruturada
-var SITEMAPS = [
-  {fonte:'Maxroll', url:'https://maxroll.gg/poe2/sitemap.xml', path:'/poe2/build-guides/'},
-];
-
-// Perguntas de pesquisa (enviadas ao DeepSeek para contexto)
-var RESEARCH_QUESTIONS = [
-  {id:'top_builds', pergunta:'Quais sao as melhores builds para {classe} na temporada atual?', fontes:['Maxroll','Mobalytics','Icy Veins','Reddit','PoE Ninja']},
-  {id:'differences', pergunta:'Quais as diferencas entre as principais builds de {classe}?', fontes:['Maxroll','Reddit','Icy Veins']},
-  {id:'season_trends', pergunta:'Quais as tendencias da temporada para {classe}?', fontes:['Reddit','Maxroll','PoE Ninja']},
-  {id:'top_creators', pergunta:'Quais criadores de conteudo recomendam builds de {classe}?', fontes:['Reddit','YouTube','Maxroll','Mobalytics']},
-  {id:'meta_mechanics', pergunta:'Quais mecanicas sao mais importantes para {classe} no meta atual?', fontes:['Reddit','Maxroll','PoE Ninja']},
-];
-
-var FONTES_URLS = {
-  'Maxroll': 'https://maxroll.gg/poe2/build-guides',
-  'Mobalytics': 'https://mobalytics.gg/poe-2/builds',
-  'Icy Veins': 'https://www.icy-veins.com/poe2/builds/',
-  'PoE Ninja': 'https://poe.ninja/poe2/builds',
-  'Reddit': 'https://www.reddit.com/r/pathofexile2builds/',
-  'Forum GGG': 'https://www.pathofexile.com/forum/view-forum/path-of-exile-2-character-builds',
-  'PoeBuilds.io': 'https://poebuilds.io/poe2',
-  'Poe-Vault': 'https://www.poe-vault.com/poe2/builds',
-};
-
-var classe = null;
-var ocupado = false;
-var CHAVES = {deepseek:''};
-var CACHE_IA = {};
-
-try{
-  var salvas = JSON.parse(localStorage.getItem('poe2_chaves'));
-  if(salvas){
-    if(salvas.deepseek) CHAVES.deepseek = salvas.deepseek;
-  }
-}catch(e){}
-
-function abrirConfig(){
-  document.getElementById('ds-key').value = CHAVES.deepseek;
-  atualizarIndicadoresChave();
-  document.getElementById('config').classList.add('aberto');
-  document.getElementById('overlay').classList.add('v');
-}
-function salvarChaves(){
-  CHAVES.deepseek = document.getElementById('ds-key').value.trim();
-  try{localStorage.setItem('poe2_chaves', JSON.stringify({deepseek:CHAVES.deepseek}));}catch(e){}
-  atualizarIndicadoresChave();
-  fecharConfig();
-}
-function atualizarIndicadoresChave(){
-  document.getElementById('ds-ind').style.background = CHAVES.deepseek.startsWith('sk-')?'var(--green)':'var(--text2)';
-}
-function fecharConfig(){
-  document.getElementById('config').classList.remove('aberto');
-  document.getElementById('overlay').classList.remove('v');
-}
-
-function montarGrid(){
-  var g = document.getElementById('grid');
-  CLASSES.forEach(function(c){
-    var d = document.createElement('div');
-    d.className = 'card' + (c.locked ? ' locked' : '');
-    d.dataset.cls = c.slug;
-    d.innerHTML = '<span class="em">'+c.em+'</span><div class="nm">'+c.nome+'</div><div class="sub">'+(c.ascend.length?c.ascend.slice(0,2).join(', '):'&nbsp;')+'</div>'+(c.pop!=='—'?'<div class="pop">'+c.pop+' dos jogadores</div>':'');
-    if(!c.locked) d.onclick = function(){selecionar(c.slug);};
-    g.appendChild(d);
-  });
-}
-montarGrid();
-
-function selecionar(s){
-  if(ocupado) return;
-  classe = s;
-  document.querySelectorAll('.card').forEach(function(el){el.classList.remove('sel');});
-  document.querySelector('[data-cls="'+s+'"]').classList.add('sel');
-  document.getElementById('btn').classList.add('pronto');
-}
-
-function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-
-// ============================================================
-// PROXY FETCH — cadeia de proxies publicos com fallback
-// ============================================================
-function fetchComProxy(url, tempoMaxCache, tempoReq){
-  tempoReq = tempoReq || 8000;
-  var ck='p2_'+url.replace(/[^a-z0-9]/gi,'_').slice(0,100);
-  try{
-    var cache = JSON.parse(localStorage.getItem(ck));
-    if(cache && Date.now()-cache.ts < (tempoMaxCache||3600000)) return Promise.resolve(cache.data);
-  }catch(e){}
-  return new Promise(function(resolver){
-    var tentar = function(i){
-      if(i>=PROXIES.length){resolver(null);return;}
-      var u = PROXIES[i]+encodeURIComponent(url);
-      var controller = new AbortController();
-      var timer = setTimeout(function(){controller.abort();},tempoReq);
-      fetch(u,{mode:'cors',signal:controller.signal}).then(function(r){
-        clearTimeout(timer);
-        if(!r.ok) throw new Error(r.status);
-        return r.text();
-      }).then(function(txt){
-        try{localStorage.setItem(ck,JSON.stringify({ts:Date.now(),data:txt}));}catch(e){}
-        resolver(txt);
-      }).catch(function(){
-        clearTimeout(timer);
-        setTimeout(function(){tentar(i+1);},300);
-      });
+function fetchComProxy(url, timeout=8000) {
+  return new Promise((resolve) => {
+    const tentar = (i) => {
+      if (i >= PROXIES.length) { resolve({ok:false,source:url,error:'todos proxies falharam'}); return; }
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeout);
+      fetch(PROXIES[i] + encodeURIComponent(url), {signal:controller.signal})
+        .then(r => r.text())
+        .then(txt => { clearTimeout(timer); resolve({ok:true,source:url,text:txt}); })
+        .catch(() => { clearTimeout(timer); tentar(i+1); });
     };
     tentar(0);
   });
 }
 
-// ============================================================
-// FONTE 1: REDDIT — busca via API oficial (CORS ativado)
-// ============================================================
-function buscarReddit(cls){
-  var c = CLASSES.find(function(c){return c.slug===cls;});
-  if(!c) return Promise.resolve([]);
-  var nome = c.nome;
-  var clsEn = cls;
-  var queries = [
-    cls+' build poe2 runes of aldur',
-    cls+' best build poe2',
-    cls+' endgame build poe2',
-    cls+' build maxroll mobalytics',
-    cls+' build guide tier list',
-    cls+' '+CLASS_KEYWORDS[clsEn].slice(0,3).join(' ')+' build',
-  ];
-  return Promise.all(queries.map(function(q){
-    return fetch('https://www.reddit.com/r/pathofexile2builds/search.json?q='+encodeURIComponent(q)+'&restrict_sr=on&sort=relevance&limit=5&t=year',{mode:'cors'})
-    .then(function(r){return r.json();})
-    .then(function(d){return(d.data||{}).children||[];})
-    .catch(function(){return[];});
-  })).then(function(resultados){
-    return fetch('https://www.reddit.com/r/pathofexile/search.json?q='+encodeURIComponent(cls+' build poe2 Runes of Aldur')+'&restrict_sr=on&sort=relevance&limit=5&t=year',{mode:'cors'})
-    .then(function(r){return r.json();})
-    .then(function(d){return(d.data||{}).children||[];})
-    .catch(function(){return[];})
-    .then(function(outros){
-      resultados.push(outros);
-      return processarReddit(resultados, cls, nome);
-    });
-  });
-}
+// ─── Fontes ───
+const FONTES = [
+  {nome:'Maxroll',icon:'📋', url: (cls) => `https://maxroll.gg/poe2/build-guides?filter[class][filters][0][value]=${cls}`},
+  {nome:'Mobalytics',icon:'📊', url: (cls) => `https://mobalytics.gg/poe-2/builds?class=${cls}`},
+  {nome:'PoE Ninja',icon:'🥷', url: (cls) => `https://poe.ninja/poe2/builds?class=${cls}`},
+  {nome:'Reddit',icon:'💬', url: (cls) => `https://www.reddit.com/r/PathOfExile2Builds/search.json?q=${cls}&sort=relevance&restrict_sr=on&limit=5`},
+];
 
-function processarReddit(resultados, clsSlug, nomeClasse){
-  var vistos={}, items=[];
-  var clsLower=nomeClasse.toLowerCase();
-  var clsSlug2=clsSlug.toLowerCase();
-  resultados.forEach(function(arr){
-    arr.forEach(function(child){
-      var p=child.data||{};
-      if(!p.title||p.title.indexOf('[removed]')>=0)return;
-      var texto=(p.title+' '+(p.selftext||'')).toLowerCase();
-      var temClasse=texto.indexOf(clsLower)>=0||texto.indexOf(clsSlug2)>=0;
-      if(!temClasse||texto.indexOf('build')<0)return;
-      if(vistos[p.permalink])return;
-      vistos[p.permalink]=true;
-      items.push({
-        fonte:'Reddit', url:'https://www.reddit.com'+p.permalink,
-        nome:p.title.slice(0,120),
-        resumo:p.title.slice(0,120),
-        score:p.score||0,
-        texto:(p.selftext||'').slice(0,500),
-        data:p.created_utc?new Date(p.created_utc*1000).toLocaleDateString('pt-BR'):'',
-      });
-    });
-  });
-  return items.slice(0,20);
-}
-
-// ============================================================
-// FONTE 2: MAXROLL — Sitemap XML via proxy
-// ============================================================
-function buscarMaxroll(cls){
-  return Promise.all(SITEMAPS.map(function(sm){
-    return fetchComProxy(sm.url, 7200000).then(function(xml){
-      if(!xml) return [];
-      var links = [];
-      var pat = new RegExp('<loc>([^<]+'+sm.path.replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&')+'[^<]+)</loc>','gi');
-      var m;
-      while((m=pat.exec(xml)) !== null){
-        var url = m[1];
-        var nome = decodeURIComponent(url.split('/').filter(function(p){return p;}).pop()||'')
-          .replace(/-/g,' ').replace(/build guide/gi,'').trim();
-        var temClasse = nome.toLowerCase().indexOf(cls)>=0 ||
-          (CLASS_KEYWORDS[cls]||[]).some(function(kw){return nome.toLowerCase().indexOf(kw)>=0;});
-        if(temClasse){
-          links.push({fonte:'Maxroll', url:url, nome:nome.slice(0,120), resumo:'Guia de build para '+cls+' via Maxroll', data:''});
-        }
-      }
-      return links.slice(0,10);
-    }).catch(function(){return[];});
-  })).then(function(results){
-    var all=[];
-    results.forEach(function(r){all=all.concat(r);});
-    return all;
-  });
-}
-
-// ============================================================
-// FONTE 3: PAGES VIA PROXY (todas as outras fontes)
-// ============================================================
-function buscarPagina(fonteNome, url, cls){
-  return fetchComProxy(url, 3600000).then(function(html){
-    if(!html) return [];
-    var resultados = [];
-    var keywords = CLASS_KEYWORDS[cls]||[cls];
-    var vistos = {};
-    var linkRegex = /<a[^>]*href="([^"]*)"[^>]*>([^<]*)<\/a>/gi;
-    var m;
-    while((m=linkRegex.exec(html)) !== null){
-      var href = m[1];
-      var texto = m[2];
-      var combined = (href+' '+texto).toLowerCase();
-      for(var k=0;k<keywords.length;k++){
-        if(combined.indexOf(keywords[k].toLowerCase())>=0 && combined.indexOf('build')>=0){
-          var key = href+texto;
-          if(!vistos[key]){
-            vistos[key]=true;
-            var urlFinal = href.indexOf('http')===0 ? href : url.replace(/\/$/,'')+'/'+href.replace(/^\//,'');
-            resultados.push({
-              fonte:fonteNome, url:urlFinal,
-              nome:texto.trim().slice(0,120),
-              resumo:'Build encontrada via '+fonteNome,
-              data:''
-            });
-          }
-          break;
-        }
-      }
+function extrairBuildsDoMaxroll(html, cls) {
+  const builds = [];
+  const regex = /<a[^>]*href="([^"]*\/build-guides\/[^"]*)"[^>]*>\s*<h2[^>]*>([^<]+)</g;
+  let m;
+  while ((m = regex.exec(html)) !== null) {
+    const nome = m[2].trim().replace(/Build Guide$/i,'').trim();
+    if (nome.length > 3 && nome.length < 100) {
+      builds.push({nome, url: m[1].startsWith('http') ? m[1] : 'https://maxroll.gg' + m[1], fonte:'Maxroll', classe:cls});
     }
-    return resultados.slice(0,8);
-  }).catch(function(){return[];});
+  }
+  return builds.slice(0, 5);
 }
 
-// ============================================================
-// FONTE 4: POE NINJA — dados de popularidade de ascendencias
-// ============================================================
-function buscarPoENinja(cls){
-  return fetchComProxy('https://poe.ninja/poe2/builds', 3600000).then(function(html){
-    if(!html) return null;
-    var popData = {cls:0};
-    CLASSES.forEach(function(c){
-      if(c.locked) return;
-      var nome = c.nome.toLowerCase();
-      var regex = new RegExp(nome+'[^<]*?(\\d+\\.?\\d?)%','i');
-      var m = html.match(regex);
-      if(m) popData[c.slug] = parseFloat(m[1]);
-    });
-    return popData;
-  }).catch(function(){return null;});
+function extrairBuildsDoReddit(json, cls) {
+  try {
+    const data = JSON.parse(json);
+    return (data.data?.children || []).slice(0, 10).map(p => ({
+      nome: p.data.title.replace(/\[.*?\]/g,'').trim().slice(0, 80),
+      url: `https://reddit.com${p.data.permalink}`,
+      fonte: 'Reddit',
+      classe: cls,
+      score: p.data.score,
+      comments: p.data.num_comments
+    }));
+  } catch { return []; }
 }
 
-// ============================================================
-// INTEGRACAO DEEPSEEK V4 FLASH — cerebro do app
-// ============================================================
-function analisarComDeepSeek(builds, cls, nome){
-  if(!CHAVES.deepseek || !CHAVES.deepseek.startsWith('sk-')) return Promise.resolve(null);
-  var ck='ds_'+cls;
-  if(CACHE_IA[ck] && Date.now()-CACHE_IA[ck].ts < 1800000) return Promise.resolve(CACHE_IA[ck].data);
-
-  var dados = builds.slice(0,25).map(function(b){
-    return 'Fonte: '+b.fonte+' | Nome: '+(b.nome||'')+' | Resumo: '+(b.resumo||'').slice(0,200);
-  }).join('\n');
-
-  var prompt = 'Voce e um especialista em Path of Exile 2 (temporada Runes of Aldur, Return of the Ancients 0.5.0). '+
-    'Analise estas builds coletadas para a classe '+nome+'. '+
-    'Retorne APENAS JSON valido (sem markdown, sem tags, sem explicacoes):\n'+
-    '{"classe":"'+nome+'","temporada":"Runes of Aldur","expansao":"Return of the Ancients 0.5.0",'+
-    '"meta_rating":7,"meta_descricao":"PT-BR",'+
-    '"top_builds":[{"nome":"Build","fonte":"Source","url":"","autor":"","tipo":"endgame","skill_principal":"","playstyle":"","descricao":"PT-BR"}],'+
-    '"habilidades_chave":[{"skill":"Nome","support_gems":["Gem1"],"uso":"PT-BR"}],'+
-    '"uniques_recomendados":[{"item":"Nome","tipo":"ItemType","build":"Build","motivo":"PT-BR"}],'+
-    '"comparacao_builds":"Texto PT-BR",'+
-    '"dicas_leveling":["PT-BR"],'+
-    '"dicas_endgame":["PT-BR"],'+
-    '"mecanicas_importantes":[{"nome":"Mecanica","descricao":"PT-BR"}]\n}\n\n'+
-    'Dados coletados das fontes:\n'+dados.slice(0,8000);
-
-  return fetch('https://api.deepseek.com/v1/chat/completions', {
-    method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+CHAVES.deepseek},
-    body:JSON.stringify({
-      model:'deepseek-v4-flash',
-      messages:[{role:'user', content:prompt}],
-      temperature:0.2,
-      max_tokens:2000
-    })
-  }).then(function(r){return r.json();}).then(function(d){
-    if(!d||!d.choices||!d.choices[0]) return null;
-    var txt = d.choices[0].message.content;
-    var m = txt.match(/\{[\s\S]*\}/);
-    if(!m) return null;
-    try{
-      var r = JSON.parse(m[0]);
-      CACHE_IA[ck] = {data:r, ts:Date.now()};
-      return r;
-    }catch(e){return null;}
-  }).catch(function(){return null;});
+function extrairBuildsGenerico(html, cls, fonte) {
+  const builds = [];
+  // Tenta extrair links com texto significativo
+  const regex = /<a[^>]*href="([^"]*)"[^>]*>([^<]{10,100})<\/a>/gi;
+  let m;
+  const termos = ['build','guide',' level ','endgame','starter','league'];
+  while ((m = regex.exec(html)) !== null) {
+    const txt = m[2].toLowerCase();
+    if (termos.some(t => txt.includes(t)) && !txt.includes('cookie') && !txt.includes('privacy')) {
+      builds.push({nome: m[2].trim().slice(0, 80), url: m[1], fonte, classe:cls});
+    }
+  }
+  return builds.slice(0, 5);
 }
 
-// ============================================================
-// FUNCAO PRINCIPAL: PESQUISAR
-// ============================================================
-function pesquisar(){
-  if(!classe || ocupado) return;
+// ─── Pesquisa ───
+async function pesquisar() {
+  if (!classeSelecionada || ocupado) return;
   ocupado = true;
-  var btn = document.getElementById('btn');
+  
+  const btn = document.getElementById('btn');
   btn.disabled = true;
-  btn.textContent = 'Pesquisando...';
-  document.getElementById('rep').innerHTML = '';
-  document.getElementById('rep').classList.remove('v');
-  var ld = document.getElementById('loading');
-  ld.classList.add('v');
-  var src = document.getElementById('loadSrc');
-  atualizarStatus(5,'Iniciando...',null,src);
-
-  var builds = [];
-  var fontes = {'Reddit':0,'Maxroll':0,'Mobalytics':0,'Icy Veins':0,'PoE Ninja':0,'Forum GGG':0,'PoeBuilds.io':0,'Poe-Vault':0};
-
-  var c = CLASSES.find(function(x){return x.slug===classe;});
-  var nomeClasse = c ? c.nome : classe;
-
-  atualizarStatus(8,'Buscando no Reddit...',fontes,src);
-  buscarReddit(classe).then(function(r){
-    builds = builds.concat(r);
-    fontes['Reddit'] = r.length;
-    atualizarStatus(16,'Reddit: '+r.length+' builds',fontes,src);
-    return buscarMaxroll(classe);
-  }).then(function(r){
-    builds = builds.concat(r);
-    fontes['Maxroll'] = r.length;
-    atualizarStatus(28,'Maxroll: '+r.length+' builds',fontes,src);
-    return buscarPagina('Mobalytics','https://mobalytics.gg/poe-2/builds',classe);
-  }).then(function(r){
-    builds = builds.concat(r);
-    fontes['Mobalytics'] = r.length;
-    atualizarStatus(38,'Mobalytics: '+r.length+' builds',fontes,src);
-    return buscarPagina('Icy Veins','https://www.icy-veins.com/poe2/builds/',classe);
-  }).then(function(r){
-    builds = builds.concat(r);
-    fontes['Icy Veins'] = r.length;
-    atualizarStatus(48,'Icy Veins: '+r.length+' builds',fontes,src);
-    return buscarPagina('PoE Ninja','https://poe.ninja/poe2/builds',classe);
-  }).then(function(r){
-    builds = builds.concat(r);
-    fontes['PoE Ninja'] = r.length;
-    atualizarStatus(58,'PoE Ninja: '+r.length+' builds',fontes,src);
-    return buscarPagina('Forum GGG','https://www.pathofexile.com/forum/view-forum/path-of-exile-2-character-builds',classe);
-  }).then(function(r){
-    builds = builds.concat(r);
-    fontes['Forum GGG'] = r.length;
-    atualizarStatus(68,'Forum GGG: '+r.length+' builds',fontes,src);
-    return buscarPagina('PoeBuilds.io','https://poebuilds.io/poe2',classe);
-  }).then(function(r){
-    builds = builds.concat(r);
-    fontes['PoeBuilds.io'] = r.length;
-    atualizarStatus(78,'PoeBuilds.io: '+r.length+' builds',fontes,src);
-    return buscarPagina('Poe-Vault','https://www.poe-vault.com/poe2/builds',classe);
-  }).then(function(r){
-    builds = builds.concat(r);
-    fontes['Poe-Vault'] = r.length;
-    atualizarStatus(88,'Poe-Vault: '+r.length+' builds',fontes,src);
-
-    atualizarStatus(91,'Total: '+builds.length+' builds. Analisando...',fontes,src);
-
-    analisarComDeepSeek(builds, classe, nomeClasse).then(function(analise){
-      atualizarStatus(95,'Gerando relatorio...',fontes,src);
-      renderizarRelatorio(builds, fontes, analise, nomeClasse);
-      atualizarStatus(100,'Pronto!',fontes,src);
-      setTimeout(function(){
-        ld.classList.remove('v');
-        btn.disabled = false;
-        btn.textContent = 'Pesquisar';
-        ocupado = false;
-      },500);
+  btn.textContent = '⏳ Pesquisando...';
+  
+  const load = document.getElementById('loading');
+  const fill = document.getElementById('fill');
+  const loadTxt = document.getElementById('loadTxt');
+  const loadSrc = document.getElementById('loadSrc');
+  const results = document.getElementById('results');
+  
+  load.classList.add('v');
+  results.classList.remove('v');
+  results.innerHTML = '';
+  fill.style.width = '0%';
+  loadSrc.innerHTML = FONTES.map(f => `<span class="ls">${f.icon} ${f.nome}</span>`).join('');
+  
+  const cls = classeSelecionada;
+  const todasBuilds = [];
+  
+  for (let i = 0; i < FONTES.length; i++) {
+    const fonte = FONTES[i];
+    loadTxt.textContent = `Consultando ${fonte.nome}...`;
+    const pct = Math.round(((i+1)/FONTES.length)*100);
+    fill.style.width = pct + '%';
+    
+    const tags = loadSrc.querySelectorAll('.ls');
+    try {
+      const resp = await fetchComProxy(fonte.url(cls), 10000);
+      if (resp.ok && resp.text) {
+        let builds = [];
+        if (fonte.nome === 'Reddit') {
+          builds = extrairBuildsDoReddit(resp.text, cls);
+        } else if (fonte.nome === 'Maxroll') {
+          builds = extrairBuildsDoMaxroll(resp.text, cls);
+        } else {
+          builds = extrairBuildsGenerico(resp.text, cls, fonte.nome);
+        }
+        todasBuilds.push(...builds);
+        if (tags[i]) { tags[i].classList.add('ok'); tags[i].textContent += ` (${builds.length})`; }
+      } else {
+        if (tags[i]) { tags[i].classList.add('fail'); }
+      }
+    } catch {
+      if (tags[i]) { tags[i].classList.add('fail'); }
+    }
+  }
+  
+  // Montar resultado
+  loadTxt.textContent = `${todasBuilds.length} builds encontradas. Ordenando...`;
+  
+  if (todasBuilds.length === 0) {
+    results.innerHTML = `<div class="empty"><span class="em">🔍</span><p>Nenhuma build encontrada para ${CLASSES.find(c=>c.slug===cls)?.name || cls}.</p><p style="color:var(--text2);margin-top:0.5rem">Tente novamente mais tarde — os proxies podem estar congestionados.</p></div>`;
+  } else {
+    // Ordenar: Reddit com mais upvotes primeiro, depois Maxroll
+    todasBuilds.sort((a,b) => (b.score||0) - (a.score||0));
+    
+    const classeInfo = CLASSES.find(c => c.slug === cls);
+    const totalFontes = [...new Set(todasBuilds.map(b=>b.fonte))].length;
+    
+    let html = `<div class="result-count">🔎 <strong>${todasBuilds.length} builds</strong> encontradas em <strong>${totalFontes}</strong> fontes para ${classeInfo?.emoji} <strong>${classeInfo?.name}</strong></div>`;
+    
+    todasBuilds.forEach((b, i) => {
+      const isBest = i === 0;
+      html += `
+        <div class="build-card${isBest?' best':''}">
+          <div class="build-top">
+            <span class="build-class">${classeInfo?.emoji} ${b.nome}</span>
+          </div>
+          <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin:0.5rem 0">
+            <span class="tag tag-source">📋 ${b.fonte}</span>
+            ${b.score ? `<span class="tag" style="background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.25)">⬆ ${b.score}</span>` : ''}
+            ${b.comments ? `<span class="tag" style="background:rgba(139,92,246,0.15);color:var(--purple);border:1px solid rgba(139,92,246,0.25)">💬 ${b.comments}</span>` : ''}
+          </div>
+          <a class="build-link" href="${b.url}" target="_blank" rel="noopener">🔗 Ver build completa →</a>
+        </div>`;
     });
-  }).catch(function(err){
-    atualizarStatus(100,'Erro: '+err,fontes,src);
-    setTimeout(function(){
-      ld.classList.remove('v');
-      btn.disabled = false;
-      btn.textContent = 'Pesquisar';
-      ocupado = false;
-    },500);
-  });
+    results.innerHTML = html;
+  }
+  
+  results.classList.add('v');
+  load.classList.remove('v');
+  btn.disabled = false;
+  btn.textContent = '🔍 Pesquisar';
+  ocupado = false;
 }
 
-// ============================================================
-// RENDERIZACAO DO RELATORIO (estilo Maxroll)
-// ============================================================
-function renderizarRelatorio(builds, fontes, analise, nomeClasse){
-  var rep = document.getElementById('rep');
-  rep.innerHTML = '';
-  rep.classList.add('v');
-
-  var html = '';
-  var rating = analise && analise.meta_rating ? analise.meta_rating : (builds.length > 10 ? 7 : 5);
-  var ratingClass = rating >= 7 ? '' : (rating >= 4 ? ' med' : ' low');
-  var ratingLabel = rating >= 7 ? 'Forte no meta' : (rating >= 4 ? 'Moderado' : 'Fora do meta');
-  var temCache = analise && CACHE_IA['ds_'+classe] ? ' <span class="cache-badge hit">cache</span>' : '';
-  var c = CLASSES.find(function(x){return x.slug===classe;});
-  var total = 0;
-  Object.keys(fontes).forEach(function(f){total+=fontes[f];});
-
-  // Meta Banner
-  html += '<div class="meta-banner">';
-  html += '  <div class="mb-top">';
-  html += '    <span class="mb-class"><span class="em">'+(c?c.em:'')+'</span> '+nomeClasse+'</span>';
-  html += '    <span class="tag tag-season">Runes of Aldur</span>';
-  html += '    <span class="tag tag-version">0.5.0</span>';
-  html += '    <span class="score-badge'+ratingClass+'">&#9733; '+rating+'/10 &mdash; '+ratingLabel+'</span>';
-  html += temCache;
-  html += '  </div>';
-  html += '  <div class="mb-info">';
-  html += '    <div class="mb-info-item"><strong>'+total+'</strong> builds em <strong>'+Object.keys(fontes).filter(function(f){return fontes[f]>0;}).length+'/'+Object.keys(fontes).length+'</strong> fontes</div>';
-  html += '  </div>';
-  html += '</div>';
-
-  // Intro
-  if(analise && analise.meta_descricao){
-    html += '<div class="sec">';
-    html += '  <h2><span class="sec-icon">&#128220;</span> Introducao <span style="font-size:0.6rem;color:var(--text2);font-weight:400">DeepSeek AI</span></h2>';
-    html += '  <div class="intro-text">'+esc(analise.meta_descricao)+'</div>';
-    html += '</div>';
-  }
-
-  // Top Builds
-  var buildsArr = analise && analise.top_builds && analise.top_builds.length ? analise.top_builds : builds;
-  html += '<div class="sec">';
-  html += '  <h2><span class="sec-icon">&#127942;</span> Melhores Builds</h2>';
-  html += '  <div class="src-list" style="margin-bottom:0.6rem">';
-  Object.keys(fontes).forEach(function(f){
-    html += '    <span class="src-item '+(fontes[f]>0?'ok':'fail')+'">'+f+': '+fontes[f]+'</span>';
-  });
-  html += '  </div>';
-
-  buildsArr.slice(0,8).forEach(function(b, i){
-    var tipo = b.tipo || 'endgame';
-    html += '<div class="build-card">';
-    html += '  <div class="bc-top">';
-    html += '    <div class="bc-title">'+(b.url?'<a href="'+esc(b.url)+'" target="_blank">':'')+esc(b.nome||('Build #'+(i+1)))+(b.url?'</a>':'')+'</div>';
-    html += '    <div class="bc-tags">';
-    html += '      <span class="tag tag-playstyle">'+tipo+'</span>';
-    if(b.fonte) html += '      <span class="tag tag-class">'+b.fonte+'</span>';
-    html += '    </div>';
-    html += '  </div>';
-    if(b.autor || b.data){
-      html += '  <div class="bc-meta">por <span class="bc-author">'+(b.autor||'Desconhecido')+'</span>'+(b.data?' &middot; '+b.data:'')+'</div>';
-    }
-    if(b.descricao) html += '  <div class="bc-desc">'+esc(b.descricao)+'</div>';
-    if(b.skill_principal || (b.skills && b.skills.length)){
-      html += '  <div class="bc-skills">';
-      if(b.skill_principal) html += '    <span class="s s-a">'+esc(b.skill_principal)+'</span>';
-      if(b.skills) b.skills.slice(0,4).forEach(function(sk){
-        html += '    <span class="s s-com">'+esc(sk)+'</span>';
-      });
-      html += '  </div>';
-    }
-    html += '</div>';
-  });
-  html += '</div>';
-
-  // Skills Table
-  if(analise && analise.habilidades_chave && analise.habilidades_chave.length){
-    html += '<div class="sec">';
-    html += '  <h2><span class="sec-icon">&#9889;</span> Habilidades &amp; Support Gems</h2>';
-    html += '  <table class="skills-table">';
-    html += '    <tr><th>Skill Principal</th><th>Support Gems</th><th>Uso</th></tr>';
-    analise.habilidades_chave.forEach(function(h){
-      html += '    <tr><td>'+esc(h.skill)+'</td><td><div class="gems">'+
-        (h.support_gems||[]).map(function(g){return '<span class="gem">'+esc(g)+'</span>';}).join('')+
-        '</div></td><td>'+esc(h.uso||'')+'</td></tr>';
-    });
-    html += '  </table>';
-    html += '</div>';
-  }
-
-  // Uniques
-  if(analise && analise.uniques_recomendados && analise.uniques_recomendados.length){
-    html += '<div class="sec">';
-    html += '  <h2><span class="sec-icon">&#128293;</span> Uniques Recomendados</h2>';
-    html += '  <div class="item-grid">';
-    analise.uniques_recomendados.forEach(function(u){
-      html += '    <div class="item-card">';
-      html += '      <div class="ic-name">'+esc(u.item)+'</div>';
-      if(u.tipo) html += '      <div class="ic-type">'+esc(u.tipo)+'</div>';
-      if(u.build) html += '      <div class="ic-build">Build: '+esc(u.build)+'</div>';
-      if(u.motivo) html += '      <div class="ic-motivo">'+esc(u.motivo)+'</div>';
-      html += '    </div>';
-    });
-    html += '  </div>';
-    html += '</div>';
-  }
-
-  // Comparacao
-  if(analise && analise.comparacao_builds){
-    html += '<div class="sec">';
-    html += '  <h2><span class="sec-icon">&#128196;</span> Comparacao entre Builds</h2>';
-    html += '  <div class="cmp-text">'+esc(analise.comparacao_builds)+'</div>';
-    html += '</div>';
-  }
-
-  // Dicas com abas
-  if(analise && ((analise.dicas_leveling&&analise.dicas_leveling.length) || (analise.dicas_endgame&&analise.dicas_endgame.length))){
-    html += '<div class="sec">';
-    html += '  <h2><span class="sec-icon">&#128161;</span> Dicas por Estagio</h2>';
-    html += '  <div class="tabs" id="dicasTabs">';
-    if(analise.dicas_leveling && analise.dicas_leveling.length) html += '    <span class="tab ativo" onclick="mudarTab(\'dicas\',\'leveling\')">Leveling</span>';
-    if(analise.dicas_endgame && analise.dicas_endgame.length) html += '    <span class="tab" onclick="mudarTab(\'dicas\',\'endgame\')">Endgame</span>';
-    html += '  </div>';
-    if(analise.dicas_leveling && analise.dicas_leveling.length){
-      html += '  <div class="tab-conteudo ativo" id="tab-dicas-leveling">';
-      html += '    <ul class="dicas-list">';
-      analise.dicas_leveling.forEach(function(d){html += '      <li>'+esc(d)+'</li>';});
-      html += '    </ul>';
-      html += '  </div>';
-    }
-    if(analise.dicas_endgame && analise.dicas_endgame.length){
-      html += '  <div class="tab-conteudo" id="tab-dicas-endgame">';
-      html += '    <ul class="dicas-list">';
-      analise.dicas_endgame.forEach(function(d){html += '      <li>'+esc(d)+'</li>';});
-      html += '    </ul>';
-      html += '  </div>';
-    }
-    html += '</div>';
-  }
-
-  // Mecanicas
-  if(analise && analise.mecanicas_importantes && analise.mecanicas_importantes.length){
-    html += '<div class="sec">';
-    html += '  <h2><span class="sec-icon">&#9881;</span> Mecanicas Importantes</h2>';
-    html += '  <div class="mech-grid">';
-    analise.mecanicas_importantes.forEach(function(m){
-      html += '    <div class="mech-card"><div class="mc-name">'+esc(m.nome)+'</div><div class="mc-desc">'+esc(m.descricao)+'</div></div>';
-    });
-    html += '  </div>';
-    html += '</div>';
-  }
-
-  // Fallback (sem DeepSeek)
-  if(!analise && builds.length > 0){
-    html += '<div class="sec">';
-    html += '  <h2><span class="sec-icon">&#128200;</span> Dados Coletados (brutos)</h2>';
-    html += '  <div style="font-size:0.78rem;color:var(--accent);margin-bottom:0.5rem;padding:0.4rem;background:rgba(196,75,43,0.08);border-radius:6px;">';
-    html += '    Configure uma chave DeepSeek AI (engrenagem &#9881;) para analise completa com meta, comparacoes e dicas.';
-    html += '  </div>';
-    builds.slice(0,15).forEach(function(b){
-      html += '<div class="build-card">';
-      html += '  <div class="bc-top">';
-      html += '    <div class="bc-title">'+(b.url?'<a href="'+esc(b.url)+'" target="_blank">':'')+esc(b.nome)+(b.url?'</a>':'')+'</div>';
-      html += '    <span class="tag tag-class">'+b.fonte+'</span>';
-      html += '  </div>';
-      if(b.score) html += '  <div class="bc-meta">Score: '+b.score+'</div>';
-      html += '</div>';
-    });
-    html += '<div style="text-align:center;margin-top:0.5rem;font-size:0.78rem;color:var(--text2)">Total: '+builds.length+' builds de '+Object.keys(fontes).filter(function(f){return fontes[f]>0;}).length+' fontes</div>';
-    html += '</div>';
-  }
-
-  if(builds.length === 0){
-    html += '<div class="err-msg">Nenhuma build encontrada para '+nomeClasse+'. Tente novamente ou verifique sua conexao.</div>';
-  }
-
-  rep.innerHTML = html;
-}
-
-// ============================================================
-// FUNCOES AUXILIARES
-// ============================================================
-function atualizarStatus(porcent, msg, fontes, elFontes){
-  document.getElementById('fill').style.width = porcent+'%';
-  document.getElementById('loadTxt').textContent = msg;
-  if(fontes && elFontes){
-    elFontes.innerHTML = Object.entries(fontes).map(function(f){
-      return '<span class="ls">'+f[0]+': '+f[1]+'</span>';
-    }).join('');
-  }
-}
-
-function mudarTab(grupo, nome){
-  document.querySelectorAll('.tab-conteudo[id^="tab-'+grupo+'"]').forEach(function(el){el.classList.remove('ativo');});
-  document.querySelectorAll('#dicasTabs .tab').forEach(function(el){el.classList.remove('ativo');});
-  var tabEl = document.getElementById('tab-'+grupo+'-'+nome);
-  if(tabEl) tabEl.classList.add('ativo');
-  var idx = (nome==='leveling') ? 0 : 1;
-  var tabs = document.querySelectorAll('#dicasTabs .tab');
-  if(tabs[idx]) tabs[idx].classList.add('ativo');
-}
+// Init
+montarGrid();
 </script>
 </body>
 </html>
